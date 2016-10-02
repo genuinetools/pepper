@@ -5,7 +5,7 @@
 Named after Pepper Potts. Set all your GitHub repos master branches to be
 protected.
 
-You can set which orgs to run the script for and use `--dry-run` to see the
+You can set which orgs to include and use `--dry-run` to see the
 changes before they are actually made. Your user is automatically added to the
 repositories it will consider.
 
