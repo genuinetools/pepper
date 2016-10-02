@@ -9,6 +9,10 @@ You can set which orgs to run the script for and use `--dry-run` to see the
 changes before they are actually made. Your user is automatically added to the
 repositories it will consider.
 
+Also see [jessfraz/audit](https://github.com/jessfraz/audit) for checking what
+collaborators, hooks, deploy keys, and protected branched you have added on
+all your GitHub repositories.
+
 ## Usage
 
 ```console
