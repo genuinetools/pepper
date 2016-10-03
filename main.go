@@ -156,11 +156,11 @@ func handleRepo(client *github.Client, repo *github.Repository) error {
 		if *branch.Name == "master" && in(orgs, *repo.Owner.Login) {
 			// return early if it is already protected
 			if *branch.Protection.Enabled {
-				fmt.Printf("Branch %s for repository %s is already protected\n", *branch.Name, *repo.FullName)
+				fmt.Printf("[OK] %s:%s is already protected\n", *repo.FullName, *branch.Name)
 				return nil
 			}
 
-			fmt.Printf("Branch %s for repository %s will be changed to protected\n", *branch.Name, *repo.FullName)
+			fmt.Printf("[UPDATE] %s:%s will be changed to protected\n", *repo.FullName, *branch.Name)
 			if dryrun {
 				// return early
 				return nil
