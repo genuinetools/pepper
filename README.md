@@ -32,14 +32,13 @@ pepper - v0.1.0
 
 ```console
 $ pepper --dry-run --token 12345 --orgs jessconf --orgs maintainerati
-Branch master for repository jessconf/jessconf is already protected
-Branch master for repository jessfraz/.vim will be changed to protected
-Branch master for repository jessfraz/anonymail will be changed to protected
-Branch master for repository jessfraz/apk-file will be changed to protected
-Branch master for repository jessfraz/apparmor-docs will be changed to protected
-Branch master for repository jessfraz/audit will be changed to protected
+[OK] jessconf/jessconf:master is already protected
+[OK] jessfraz/.vim:master is already protected
+[OK] jessfraz/anonymail:master is already protected
+[OK] jessfraz/apk-file:master is already protected
+[UPDATE] jessfraz/certok:master will be changed to protected
 ...
-Branch master for repository jessfraz/weather will be changed to protected
-Branch master for repository jessfraz/ykpiv will be changed to protected
-Branch master for repository maintainerati/wontfix-cabal-site is already protected
+[OK] jessfraz/weather:master is already protected
+[OK] jessfraz/ykpiv:master is already protected
+[OK] maintainerati/wontfix-cabal-site:master is already protected
 ```
