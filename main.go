@@ -170,7 +170,7 @@ func handleRepo(client *github.Client, repo *github.Repository) error {
 	for _, branch := range branches {
 		if *branch.Name == "master" && in(orgs, *repo.Owner.Login) {
 			// return early if it is already protected
-			if *branch.Protection.Enabled {
+			if *branch.Protected {
 				fmt.Printf("[OK] %s:%s is already protected\n", *repo.FullName, *branch.Name)
 				return nil
 			}
@@ -183,8 +183,12 @@ func handleRepo(client *github.Client, repo *github.Repository) error {
 
 			// set the branch to be protected
 			b := true
-			branch.Protection.Enabled = &b
-			if _, _, err := client.Repositories.EditBranch(*repo.Owner.Login, *repo.Name, *branch.Name, branch); err != nil {
+			branch.Protected = &b
+			protectionReq := &github.ProtectionRequest{
+				RequiredStatusChecks: nil,
+				Restrictions:         nil,
+			}
+			if _, _, err := client.Repositories.UpdateBranchProtection(*repo.Owner.Login, *repo.Name, *branch.Name, protectionReq); err != nil {
 				return err
 			}
 		}
