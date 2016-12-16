@@ -19,6 +19,7 @@ import (
 	"flag"
 	"fmt"
 	"net/http"
+	"net/url"
 	"os"
 	"os/signal"
 	"syscall"
@@ -38,6 +39,7 @@ const (
 
 var (
 	token  string
+	enturl string
 	orgs   stringSlice
 	dryrun bool
 
@@ -60,6 +62,7 @@ func (s *stringSlice) Set(value string) error {
 func init() {
 	// parse flags
 	flag.StringVar(&token, "token", "", "GitHub API token")
+	flag.StringVar(&enturl, "url", "", "GitHub Enterprise URL")
 	flag.Var(&orgs, "orgs", "organizations to include")
 	flag.BoolVar(&dryrun, "dry-run", false, "do not change branch settings just print the changes that would occur")
 
@@ -109,6 +112,13 @@ func main() {
 
 	// Create the github client.
 	client := github.NewClient(tc)
+	if enturl != "" {
+		var err error
+		client.BaseURL, err = url.Parse(enturl + "/api/v3/")
+		if err != nil {
+			logrus.Fatal(err)
+		}
+	}
 
 	// Get the current user
 	user, _, err := client.Users.Get("")
