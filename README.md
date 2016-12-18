@@ -21,10 +21,14 @@ pepper - v0.1.0
   -d    run in debug mode
   -dry-run
         do not change branch settings just print the changes that would occur
+  -nouser
+        do not include your user
   -orgs value
         organizations to include
   -token string
         GitHub API token
+  -url string
+        GitHub Enterprise URL
   -v    print version and exit (shorthand)
   -version
         print version and exit
