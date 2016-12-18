@@ -41,6 +41,7 @@ var (
 	token  string
 	enturl string
 	orgs   stringSlice
+	nouser bool
 	dryrun bool
 
 	debug   bool
@@ -64,6 +65,7 @@ func init() {
 	flag.StringVar(&token, "token", "", "GitHub API token")
 	flag.StringVar(&enturl, "url", "", "GitHub Enterprise URL")
 	flag.Var(&orgs, "orgs", "organizations to include")
+	flag.BoolVar(&nouser, "nouser", false, "do not include your user")
 	flag.BoolVar(&dryrun, "dry-run", false, "do not change branch settings just print the changes that would occur")
 
 	flag.BoolVar(&version, "version", false, "print version and exit")
@@ -89,6 +91,10 @@ func init() {
 
 	if token == "" {
 		usageAndExit("GitHub token cannot be empty.", 1)
+	}
+
+	if nouser && orgs == nil {
+		usageAndExit("no organizations provided", 1)
 	}
 }
 
@@ -120,14 +126,16 @@ func main() {
 		}
 	}
 
-	// Get the current user
-	user, _, err := client.Users.Get("")
-	if err != nil {
-		logrus.Fatal(err)
+	if !nouser {
+		// Get the current user
+		user, _, err := client.Users.Get("")
+		if err != nil {
+			logrus.Fatal(err)
+		}
+		username := *user.Login
+		// add the current user to orgs
+		orgs = append(orgs, username)
 	}
-	username := *user.Login
-	// add the current user to orgs
-	orgs = append(orgs, username)
 
 	page := 1
 	perPage := 20
