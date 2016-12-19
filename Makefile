@@ -1,40 +1,29 @@
-# Set an output prefix, which is the local directory if not specified
-PREFIX?=$(shell pwd)
-BUILDTAGS=
+OS = darwin freebsd linux openbsd windows
+ARCHS = 386 arm amd64 arm64
 
-.PHONY: clean all fmt vet lint build test install static
-.DEFAULT: default
+all: build release
 
-all: clean build fmt lint test vet install
+build: deps
+	go build
 
-build:
-	@echo "+ $@"
-	@go build -tags "$(BUILDTAGS) cgo" .
+release: clean deps
+	@for arch in $(ARCHS);\
+	do \
+		for os in $(OS);\
+		do \
+			echo "Building $$os-$$arch"; \
+			mkdir -p build/pepper-$$os-$$arch/; \
+			GOOS=$$os GOARCH=$$arch go build -o build/pepper-$$os-$$arch/pepper; \
+			tar cz -C build -f build/pepper-$$os-$$arch.tar.gz pepper-$$os-$$arch; \
+		done \
+	done
 
-static:
-	@echo "+ $@"
-	CGO_ENABLED=1 go build -tags "$(BUILDTAGS) cgo static_build" -ldflags "-w -extldflags -static" -o pepper .
+test: deps
+	go test ./...
 
-fmt:
-	@echo "+ $@"
-	@gofmt -s -l . | grep -v vendor | tee /dev/stderr
-
-lint:
-	@echo "+ $@"
-	@golint ./... | grep -v vendor | tee /dev/stderr
-
-test: fmt lint vet
-	@echo "+ $@"
-	@go test -v -tags "$(BUILDTAGS) cgo" $(shell go list ./... | grep -v vendor)
-
-vet:
-	@echo "+ $@"
-	@go vet $(shell go list ./... | grep -v vendor)
+deps:
+	go get -d -v -t ./...
 
 clean:
-	@echo "+ $@"
-	@rm -rf pepper
-
-install:
-	@echo "+ $@"
-	@go install .
+	rm -rf build
+	rm -f pepper
