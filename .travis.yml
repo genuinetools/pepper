@@ -4,8 +4,10 @@
   notifications:
     email: true
   go:
-    - 1.6
-    - 1.7
+    - 1.6.x
+    - 1.7.x
+    - 1.8.x
+    - 1.9.x
     - tip
   env:
     global:
@@ -18,3 +20,46 @@
     - test -z "$(golint ./... | grep -v vendor | tee /dev/stderr)"
     - test -z "$(gofmt -s -l . | grep -v vendor | tee /dev/stderr)"
     - go test $(go list ./... | grep -v vendor)
+    - make release
+  deploy:
+    provider: releases
+    api_key:
+      secure: "M+6p8uBddKGqQZRkC78yifshlEZc9TdWthIoIyU1HYtHGm1NmWlZJS4t533IzLhRjDLH8czaNz+wjYSMEGjZ2YV/lMeUBgy151K2FS1YAwezmZmXVhk5ZrbRl+mukcFEuqvv8/Z/2Y6pcRNsEXkXv6dxEqy7wMTsvCEHMBRv+1rg+p0tDTVFySytml8OOLc1G7Q/d04dHDKQDd4SYq/foltUKg43U39xgeO1F1mEZcw1tkeehFafmsZveeGihA3ML3x5pq5ooJctLz+ZiTqKj5kTlxKNKkTY3bDiuT8QgtTks64SvootOrjX8Zo2sQdqoxo8QH9LIyL5+IFkgLgC77FyBhqiuP1wMkjxmv/aKAim2iutZWNacb5Im52eR79D7IbpRjgLWbm/aqi4RNluE7lRe9i+vz8/n45EhjcWpsHr44dbkueHp1lS9weyNSt4o8Um2vgE2t4gT+jTb2Ougt7Y1bEQEultTJp0cFqEWLpUIYKhM7SUoO5mlbWKaz++yONVA5Fl6GtZXf4g53g3hYa/IrPrQnR6uxwzdS0dbLkTD5hDbgi94oWL/Sfv/g9pVlQXznjfGomWAVv1oKeyRfzQQOQMqIDnMjIM49tsIWWn/q6PLeT6wNuf+O/d0XEVEpW+ZzJmR7KaEvIdeVM4VU2316GMsZ58a5yaOIWC1gM="
+    go: 1.9.x
+    file:
+      - cross/pepper-linux-amd64.md5
+      - cross/pepper-windows-386.sha256
+      - cross/pepper-linux-arm
+      - cross/pepper-darwin-amd64.md5
+      - cross/pepper-darwin-amd64
+      - cross/pepper-solaris-amd64.md5
+      - cross/pepper-linux-arm64.sha256
+      - cross/pepper-linux-arm.sha256
+      - cross/pepper-linux-386.sha256
+      - cross/pepper-darwin-386.md5
+      - cross/pepper-windows-386.md5
+      - cross/pepper-freebsd-amd64.md5
+      - cross/pepper-linux-arm64.md5
+      - cross/pepper-linux-arm64
+      - cross/pepper-freebsd-amd64.sha256
+      - cross/pepper-freebsd-386.md5
+      - cross/pepper-linux-amd64.sha256
+      - cross/pepper-linux-386.md5
+      - cross/pepper-freebsd-386
+      - cross/pepper-solaris-amd64.sha256
+      - cross/pepper-windows-amd64
+      - cross/pepper-windows-amd64.md5
+      - cross/pepper-windows-amd64.sha256
+      - cross/pepper-linux-arm.md5
+      - cross/pepper-darwin-386.sha256
+      - cross/pepper-darwin-amd64.sha256
+      - cross/pepper-windows-386
+      - cross/pepper-solaris-amd64
+      - cross/pepper-darwin-386
+      - cross/pepper-linux-386
+      - cross/pepper-freebsd-amd64
+      - cross/pepper-freebsd-386.sha256
+      - cross/pepper-linux-amd64
+    skip_cleanup: true
+    on:
+      tags: true

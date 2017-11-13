@@ -28,13 +28,12 @@ import (
 
 	"github.com/Sirupsen/logrus"
 	"github.com/google/go-github/github"
+	"github.com/jessfraz/pepper/version"
 )
 
 const (
 	// BANNER is what is printed for help/info output.
 	BANNER = "pepper - %s\n"
-	// VERSION is the binary version.
-	VERSION = "v0.1.0"
 )
 
 var (
@@ -44,8 +43,8 @@ var (
 	nouser bool
 	dryrun bool
 
-	debug   bool
-	version bool
+	debug bool
+	vrsn  bool
 )
 
 // stringSlice is a slice of strings
@@ -68,19 +67,19 @@ func init() {
 	flag.BoolVar(&nouser, "nouser", false, "do not include your user")
 	flag.BoolVar(&dryrun, "dry-run", false, "do not change branch settings just print the changes that would occur")
 
-	flag.BoolVar(&version, "version", false, "print version and exit")
-	flag.BoolVar(&version, "v", false, "print version and exit (shorthand)")
+	flag.BoolVar(&vrsn, "version", false, "print version and exit")
+	flag.BoolVar(&vrsn, "v", false, "print version and exit (shorthand)")
 	flag.BoolVar(&debug, "d", false, "run in debug mode")
 
 	flag.Usage = func() {
-		fmt.Fprint(os.Stderr, fmt.Sprintf(BANNER, VERSION))
+		fmt.Fprint(os.Stderr, fmt.Sprintf(BANNER, version.VERSION))
 		flag.PrintDefaults()
 	}
 
 	flag.Parse()
 
-	if version {
-		fmt.Printf("%s", VERSION)
+	if vrsn {
+		fmt.Printf("pepper version %s, build %s", version.VERSION, version.GITCOMMIT)
 		os.Exit(0)
 	}
 
@@ -139,6 +138,7 @@ func main() {
 
 	page := 1
 	perPage := 20
+	logrus.Debugf("Getting repositories...")
 	if err := getRepositories(client, page, perPage); err != nil {
 		logrus.Fatal(err)
 	}
@@ -157,6 +157,7 @@ func getRepositories(client *github.Client, page, perPage int) error {
 	}
 
 	for _, repo := range repos {
+		logrus.Debugf("Handling repo %s...", repo.FullName)
 		if err := handleRepo(client, repo); err != nil {
 			logrus.Warn(err)
 		}
