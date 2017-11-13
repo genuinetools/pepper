@@ -138,7 +138,7 @@ func main() {
 	}
 
 	page := 1
-	perPage := 20
+	perPage := 100
 	logrus.Debugf("Getting repositories...")
 	if err := getRepositories(client, page, perPage); err != nil {
 		logrus.Fatal(err)
@@ -188,21 +188,26 @@ func handleRepo(client *github.Client, repo *github.Repository) error {
 	}
 
 	for _, branch := range branches {
-		if *branch.Name == "master" && in(orgs, *repo.Owner.Login) {
+		if branch.GetName() == "master" && in(orgs, *repo.Owner.Login) {
 			// return early if it is already protected
 			if branch.GetProtected() {
-				fmt.Printf("[OK] %s:%s is already protected\n", *repo.FullName, *branch.Name)
+				fmt.Printf("[OK] %s:%s is already protected\n", *repo.FullName, branch.GetName())
 				return nil
 			}
 
-			fmt.Printf("[UPDATE] %s:%s will be changed to protected\n", *repo.FullName, *branch.Name)
+			fmt.Printf("[UPDATE] %s:%s will be changed to protected\n", *repo.FullName, branch.GetName())
 			if dryrun {
 				// return early
 				return nil
 			}
 
 			// set the branch to be protected
-			if _, _, err := client.Repositories.UpdateBranchProtection(context.Background(), *repo.Owner.Login, *repo.Name, *branch.Name, &github.ProtectionRequest{}); err != nil {
+			if _, _, err := client.Repositories.UpdateBranchProtection(context.Background(), *repo.Owner.Login, *repo.Name, *branch.Name, &github.ProtectionRequest{
+				RequiredStatusChecks: &github.RequiredStatusChecks{
+					Strict:   false,
+					Contexts: []string{},
+				},
+			}); err != nil {
 				return err
 			}
 		}
