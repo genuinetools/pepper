@@ -202,7 +202,9 @@ func handleRepo(client *github.Client, repo *github.Repository) error {
 
 			// set the branch to be protected
 			b := true
-			branch.Protection.Enabled = &b
+			branch.Protection = &github.Protection{
+				Enabled: &b,
+			}
 			if _, _, err := client.Repositories.EditBranch(*repo.Owner.Login, *repo.Name, *branch.Name, branch); err != nil {
 				return err
 			}
