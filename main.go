@@ -16,6 +16,7 @@ limitations under the License.
 package main
 
 import (
+	"context"
 	"flag"
 	"fmt"
 	"net/http"
@@ -127,7 +128,7 @@ func main() {
 
 	if !nouser {
 		// Get the current user
-		user, _, err := client.Users.Get("")
+		user, _, err := client.Users.Get(context.Background(), "")
 		if err != nil {
 			logrus.Fatal(err)
 		}
@@ -151,7 +152,7 @@ func getRepositories(client *github.Client, page, perPage int) error {
 			PerPage: perPage,
 		},
 	}
-	repos, resp, err := client.Repositories.List("", opt)
+	repos, resp, err := client.Repositories.List(context.Background(), "", opt)
 	if err != nil {
 		return err
 	}
@@ -178,7 +179,7 @@ func handleRepo(client *github.Client, repo *github.Repository) error {
 		PerPage: 100,
 	}
 
-	branches, resp, err := client.Repositories.ListBranches(*repo.Owner.Login, *repo.Name, opt)
+	branches, resp, err := client.Repositories.ListBranches(context.Background(), *repo.Owner.Login, *repo.Name, opt)
 	if resp.StatusCode == http.StatusNotFound || resp.StatusCode == http.StatusForbidden {
 		return nil
 	}
@@ -189,7 +190,7 @@ func handleRepo(client *github.Client, repo *github.Repository) error {
 	for _, branch := range branches {
 		if *branch.Name == "master" && in(orgs, *repo.Owner.Login) {
 			// return early if it is already protected
-			if branch.Protection != nil && *branch.Protection.Enabled {
+			if branch.GetProtected() {
 				fmt.Printf("[OK] %s:%s is already protected\n", *repo.FullName, *branch.Name)
 				return nil
 			}
@@ -201,11 +202,7 @@ func handleRepo(client *github.Client, repo *github.Repository) error {
 			}
 
 			// set the branch to be protected
-			b := true
-			branch.Protection = &github.Protection{
-				Enabled: &b,
-			}
-			if _, _, err := client.Repositories.EditBranch(*repo.Owner.Login, *repo.Name, *branch.Name, branch); err != nil {
+			if _, _, err := client.Repositories.UpdateBranchProtection(context.Background(), *repo.Owner.Login, *repo.Name, *branch.Name, &github.ProtectionRequest{}); err != nil {
 				return err
 			}
 		}
