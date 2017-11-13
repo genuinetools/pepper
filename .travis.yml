@@ -25,7 +25,8 @@
     provider: releases
     api_key:
       secure: "Z82upaUaEVr547TTex0LjjGo9k+e6CX8BR6mEDJ+kQnicLx5hplpgOMF1R8QujieedGReXLgWIlFKFm6M84roMQzDK/84sx7YezchgLt1C0OvGFVuMJLxkJgOWeL4ybkpfWL1fkx0kU4UGrcMB14ZCQ6WPmwrIK4sVn3y+nDN5ryMhN3YoMi0bJH9WTMxKDQecQ6/hHanIpeoLNocs9ZMOfW4ZXeMKyfCyK/w9jo2LC/ufz135jE2j3+iIwdwZRGvsqvYDiWB6udyxAtpTovqOz7pqELbPGEWjzPjnqXz6WKOvASgD+FQFTCFYMJhnCCldiXBUU6kuyjqOK9LcZpgiuBiH/sGfQpSX1L6655oo8zy8tdQKtcBfbFBwPPEJmPb/T7bBxipybPjzFF4WIMIRccqXV5lywlygV+mrcFIBqtCpzSte6Cdb73B4pXOwbgLJENHAEUHSVGq0OGqraleXSyxojG9AgyuSCSNeXkknxHDKUX4t3e/e2pKF2Z+bGge6I/Jb9Y1yA5U71AqT9NBDhfqz+/tup/EevAAreOYZWW1VQc7ne+sYbTSdFN6skCc+Cth3O6aS54MvrFRZp/YnYSutiDnQgupISqcxH3XVKFRz29h/uPWtvN4l35Jm6lFXeakzBtarGawUoHLKhYHk3IQtBt2zHWuzG22jw1s+E="
-    go: 1.9.x
+    on:
+      go: 1.9.x
     file:
       - cross/pepper-linux-amd64.md5
       - cross/pepper-windows-386.sha256
