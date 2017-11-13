@@ -157,7 +157,7 @@ func getRepositories(client *github.Client, page, perPage int) error {
 	}
 
 	for _, repo := range repos {
-		logrus.Debugf("Handling repo %s...", repo.FullName)
+		logrus.Debugf("Handling repo %s...", *repo.FullName)
 		if err := handleRepo(client, repo); err != nil {
 			logrus.Warn(err)
 		}
@@ -189,7 +189,7 @@ func handleRepo(client *github.Client, repo *github.Repository) error {
 	for _, branch := range branches {
 		if *branch.Name == "master" && in(orgs, *repo.Owner.Login) {
 			// return early if it is already protected
-			if *branch.Protection.Enabled {
+			if branch.Protection != nil && *branch.Protection.Enabled {
 				fmt.Printf("[OK] %s:%s is already protected\n", *repo.FullName, *branch.Name)
 				return nil
 			}
