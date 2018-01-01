@@ -120,11 +120,13 @@ func main() {
 		}
 	}()
 
+	ctx := context.Background()
+
 	// Create the http client.
 	ts := oauth2.StaticTokenSource(
 		&oauth2.Token{AccessToken: token},
 	)
-	tc := oauth2.NewClient(oauth2.NoContext, ts)
+	tc := oauth2.NewClient(ctx, ts)
 
 	// Create the github client.
 	client := github.NewClient(tc)
@@ -138,7 +140,7 @@ func main() {
 
 	if !nouser {
 		// Get the current user
-		user, _, err := client.Users.Get(context.Background(), "")
+		user, _, err := client.Users.Get(ctx, "")
 		if err != nil {
 			logrus.Fatal(err)
 		}
@@ -150,26 +152,26 @@ func main() {
 	page := 1
 	perPage := 100
 	logrus.Debugf("Getting repositories...")
-	if err := getRepositories(client, page, perPage); err != nil {
+	if err := getRepositories(ctx, client, page, perPage); err != nil {
 		logrus.Fatal(err)
 	}
 }
 
-func getRepositories(client *github.Client, page, perPage int) error {
+func getRepositories(ctx context.Context, client *github.Client, page, perPage int) error {
 	opt := &github.RepositoryListOptions{
 		ListOptions: github.ListOptions{
 			Page:    page,
 			PerPage: perPage,
 		},
 	}
-	repos, resp, err := client.Repositories.List(context.Background(), "", opt)
+	repos, resp, err := client.Repositories.List(ctx, "", opt)
 	if err != nil {
 		return err
 	}
 
 	for _, repo := range repos {
 		logrus.Debugf("Handling repo %s...", *repo.FullName)
-		if err := handleRepo(client, repo); err != nil {
+		if err := handleRepo(ctx, client, repo); err != nil {
 			logrus.Warn(err)
 		}
 	}
@@ -180,16 +182,16 @@ func getRepositories(client *github.Client, page, perPage int) error {
 	}
 
 	page = resp.NextPage
-	return getRepositories(client, page, perPage)
+	return getRepositories(ctx, client, page, perPage)
 }
 
 // handleRepo will return nil error if the user does not have access to something.
-func handleRepo(client *github.Client, repo *github.Repository) error {
+func handleRepo(ctx context.Context, client *github.Client, repo *github.Repository) error {
 	opt := &github.ListOptions{
 		PerPage: 100,
 	}
 
-	branches, resp, err := client.Repositories.ListBranches(context.Background(), *repo.Owner.Login, *repo.Name, opt)
+	branches, resp, err := client.Repositories.ListBranches(ctx, *repo.Owner.Login, *repo.Name, opt)
 	if resp.StatusCode == http.StatusNotFound || resp.StatusCode == http.StatusForbidden {
 		return nil
 	}
@@ -199,20 +201,26 @@ func handleRepo(client *github.Client, repo *github.Repository) error {
 
 	for _, branch := range branches {
 		if branch.GetName() == "master" && in(orgs, *repo.Owner.Login) {
+			// we must get the individual branch for the branch protection to work
+			b, _, err := client.Repositories.GetBranch(ctx, *repo.Owner.Login, *repo.Name, branch.GetName())
+			if err != nil {
+				return err
+			}
+
 			// return early if it is already protected
-			if branch.GetProtected() {
-				fmt.Printf("[OK] %s:%s is already protected\n", *repo.FullName, branch.GetName())
+			if b.GetProtected() {
+				fmt.Printf("[OK] %s:%s is already protected\n", *repo.FullName, b.GetName())
 				return nil
 			}
 
-			fmt.Printf("[UPDATE] %s:%s will be changed to protected\n", *repo.FullName, branch.GetName())
+			fmt.Printf("[UPDATE] %s:%s will be changed to protected\n", *repo.FullName, b.GetName())
 			if dryrun {
 				// return early
 				return nil
 			}
 
 			// set the branch to be protected
-			if _, _, err := client.Repositories.UpdateBranchProtection(context.Background(), *repo.Owner.Login, *repo.Name, *branch.Name, &github.ProtectionRequest{
+			if _, _, err := client.Repositories.UpdateBranchProtection(ctx, *repo.Owner.Login, *repo.Name, b.GetName(), &github.ProtectionRequest{
 				RequiredStatusChecks: &github.RequiredStatusChecks{
 					Strict:   false,
 					Contexts: []string{},
