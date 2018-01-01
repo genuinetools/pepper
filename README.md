@@ -33,21 +33,24 @@ $ go get github.com/jessfraz/pepper
 
 ```console
 $ pepper -h
-pepper - v0.1.2
-  -d    run in debug mode
-  -dry-run
-        do not change branch settings just print the changes that would occur
-  -nouser
-        do not include your user
-  -orgs value
-        organizations to include
-  -token string
-        GitHub API token
-  -url string
-        GitHub Enterprise URL
-  -v    print version and exit (shorthand)
-  -version
-        print version and exit
+ _ __   ___ _ __  _ __   ___ _ __
+| '_ \ / _ \ '_ \| '_ \ / _ \ '__|
+| |_) |  __/ |_) | |_) |  __/ |
+| .__/ \___| .__/| .__/ \___|_|
+|_|        |_|   |_|
+
+ Set all your GitHub repos master branches to be protected.
+ Version: v0.1.2
+ Build: 8b7274f
+
+  -d       run in debug mode
+  -dry-run  do not change branch settings just print the changes that would occur
+  -nouser   do not include your user
+  -orgs     organizations to include
+  -token    GitHub API token (or env var GITHUB_TOKEN)
+  -url      GitHub Enterprise URL
+  -v        print version and exit (shorthand)
+  -version  print version and exit
 ```
 
 ```console

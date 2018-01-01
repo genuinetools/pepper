@@ -44,7 +44,7 @@ const (
  Version: %s
  Build: %s
 
- `
+`
 )
 
 var (
