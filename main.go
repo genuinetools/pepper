@@ -27,9 +27,9 @@ import (
 
 	"golang.org/x/oauth2"
 
-	"github.com/Sirupsen/logrus"
 	"github.com/google/go-github/github"
 	"github.com/jessfraz/pepper/version"
+	"github.com/sirupsen/logrus"
 )
 
 const (
@@ -39,6 +39,7 @@ const (
 | |_) |  __/ |_) | |_) |  __/ |
 | .__/ \___| .__/| .__/ \___|_|
 |_|        |_|   |_|
+
  Set all your GitHub repos master branches to be protected.
  Version: %s
  Build: %s
