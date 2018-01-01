@@ -151,14 +151,19 @@ func main() {
 
 	page := 1
 	perPage := 100
+	affiliation := "owner,collaborator"
+	if len(orgs) > 0 {
+		affiliation += ",organization_member"
+	}
 	logrus.Debugf("Getting repositories...")
-	if err := getRepositories(ctx, client, page, perPage); err != nil {
+	if err := getRepositories(ctx, client, page, perPage, affiliation); err != nil {
 		logrus.Fatal(err)
 	}
 }
 
-func getRepositories(ctx context.Context, client *github.Client, page, perPage int) error {
+func getRepositories(ctx context.Context, client *github.Client, page, perPage int, affiliation string) error {
 	opt := &github.RepositoryListOptions{
+		Affiliation: affiliation,
 		ListOptions: github.ListOptions{
 			Page:    page,
 			PerPage: perPage,
@@ -182,7 +187,7 @@ func getRepositories(ctx context.Context, client *github.Client, page, perPage i
 	}
 
 	page = resp.NextPage
-	return getRepositories(ctx, client, page, perPage)
+	return getRepositories(ctx, client, page, perPage, affiliation)
 }
 
 // handleRepo will return nil error if the user does not have access to something.
