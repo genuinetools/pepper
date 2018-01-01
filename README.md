@@ -43,7 +43,7 @@ $ pepper -h
  Version: v0.1.2
  Build: 8b7274f
 
-  -d       run in debug mode
+  -d        run in debug mode
   -dry-run  do not change branch settings just print the changes that would occur
   -nouser   do not include your user
   -orgs     organizations to include
