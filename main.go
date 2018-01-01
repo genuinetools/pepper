@@ -62,7 +62,7 @@ func (s *stringSlice) Set(value string) error {
 
 func init() {
 	// parse flags
-	flag.StringVar(&token, "token", os.Getenv("GITHUB_TOKEN"), "GitHub API token")
+	flag.StringVar(&token, "token", os.Getenv("GITHUB_TOKEN"), "GitHub API token (or env var GITHUB_TOKEN)")
 	flag.StringVar(&enturl, "url", "", "GitHub Enterprise URL")
 	flag.Var(&orgs, "orgs", "organizations to include")
 	flag.BoolVar(&nouser, "nouser", false, "do not include your user")
