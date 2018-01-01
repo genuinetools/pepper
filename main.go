@@ -138,6 +138,12 @@ func main() {
 		}
 	}
 
+	// Affiliation must be set before we add the user to the "orgs".
+	affiliation := "owner,collaborator"
+	if len(orgs) > 0 {
+		affiliation += ",organization_member"
+	}
+
 	if !nouser {
 		// Get the current user
 		user, _, err := client.Users.Get(ctx, "")
@@ -151,10 +157,6 @@ func main() {
 
 	page := 1
 	perPage := 100
-	affiliation := "owner,collaborator"
-	if len(orgs) > 0 {
-		affiliation += ",organization_member"
-	}
 	logrus.Debugf("Getting repositories...")
 	if err := getRepositories(ctx, client, page, perPage, affiliation); err != nil {
 		logrus.Fatal(err)
