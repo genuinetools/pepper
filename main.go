@@ -34,7 +34,16 @@ import (
 
 const (
 	// BANNER is what is printed for help/info output.
-	BANNER = "pepper - %s\n"
+	BANNER = ` _ __   ___ _ __  _ __   ___ _ __
+| '_ \ / _ \ '_ \| '_ \ / _ \ '__|
+| |_) |  __/ |_) | |_) |  __/ |
+| .__/ \___| .__/| .__/ \___|_|
+|_|        |_|   |_|
+ Set all your GitHub repos master branches to be protected.
+ Version: %s
+ Build: %s
+
+ `
 )
 
 var (
@@ -73,7 +82,7 @@ func init() {
 	flag.BoolVar(&debug, "d", false, "run in debug mode")
 
 	flag.Usage = func() {
-		fmt.Fprint(os.Stderr, fmt.Sprintf(BANNER, version.VERSION))
+		fmt.Fprint(os.Stderr, fmt.Sprintf(BANNER, version.VERSION, version.GITCOMMIT))
 		flag.PrintDefaults()
 	}
 
