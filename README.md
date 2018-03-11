@@ -1,6 +1,6 @@
 # pepper
 
-[![Travis CI](https://travis-ci.org/jessfraz/pepper.svg?branch=master)](https://travis-ci.org/jessfraz/pepper)
+[![Travis CI](https://travis-ci.org/genuinetools/pepper.svg?branch=master)](https://travis-ci.org/genuinetools/pepper)
 
 Named after Pepper Potts. Set all your GitHub repos master branches to be
 protected.
@@ -9,7 +9,7 @@ You can set which orgs to include and use `--dry-run` to see the
 changes before they are actually made. Your user is automatically added to the
 repositories it will consider.
 
-Also see [jessfraz/audit](https://github.com/jessfraz/audit) for checking what
+Also see [genuinetools/audit](https://github.com/genuinetools/audit) for checking what
 collaborators, hooks, deploy keys, and protected branched you have added on
 all your GitHub repositories.
 
@@ -17,16 +17,16 @@ all your GitHub repositories.
 
 #### Binaries
 
-- **darwin** [386](https://github.com/jessfraz/pepper/releases/download/v0.4.0/pepper-darwin-386) / [amd64](https://github.com/jessfraz/pepper/releases/download/v0.4.0/pepper-darwin-amd64)
-- **freebsd** [386](https://github.com/jessfraz/pepper/releases/download/v0.4.0/pepper-freebsd-386) / [amd64](https://github.com/jessfraz/pepper/releases/download/v0.4.0/pepper-freebsd-amd64)
-- **linux** [386](https://github.com/jessfraz/pepper/releases/download/v0.4.0/pepper-linux-386) / [amd64](https://github.com/jessfraz/pepper/releases/download/v0.4.0/pepper-linux-amd64) / [arm](https://github.com/jessfraz/pepper/releases/download/v0.4.0/pepper-linux-arm) / [arm64](https://github.com/jessfraz/pepper/releases/download/v0.4.0/pepper-linux-arm64)
-- **solaris** [amd64](https://github.com/jessfraz/pepper/releases/download/v0.4.0/pepper-solaris-amd64)
-- **windows** [386](https://github.com/jessfraz/pepper/releases/download/v0.4.0/pepper-windows-386) / [amd64](https://github.com/jessfraz/pepper/releases/download/v0.4.0/pepper-windows-amd64)
+- **darwin** [386](https://github.com/genuinetools/pepper/releases/download/v0.4.0/pepper-darwin-386) / [amd64](https://github.com/genuinetools/pepper/releases/download/v0.4.0/pepper-darwin-amd64)
+- **freebsd** [386](https://github.com/genuinetools/pepper/releases/download/v0.4.0/pepper-freebsd-386) / [amd64](https://github.com/genuinetools/pepper/releases/download/v0.4.0/pepper-freebsd-amd64)
+- **linux** [386](https://github.com/genuinetools/pepper/releases/download/v0.4.0/pepper-linux-386) / [amd64](https://github.com/genuinetools/pepper/releases/download/v0.4.0/pepper-linux-amd64) / [arm](https://github.com/genuinetools/pepper/releases/download/v0.4.0/pepper-linux-arm) / [arm64](https://github.com/genuinetools/pepper/releases/download/v0.4.0/pepper-linux-arm64)
+- **solaris** [amd64](https://github.com/genuinetools/pepper/releases/download/v0.4.0/pepper-solaris-amd64)
+- **windows** [386](https://github.com/genuinetools/pepper/releases/download/v0.4.0/pepper-windows-386) / [amd64](https://github.com/genuinetools/pepper/releases/download/v0.4.0/pepper-windows-amd64)
 
 #### Via Go
 
 ```bash
-$ go get github.com/jessfraz/pepper
+$ go get github.com/genuinetools/pepper
 ```
 
 ## Usage
@@ -56,12 +56,12 @@ $ pepper -h
 ```console
 $ pepper --dry-run --token 12345 --orgs jessconf --orgs maintainerati
 [OK] jessconf/jessconf:master is already protected
-[OK] jessfraz/.vim:master is already protected
-[OK] jessfraz/anonymail:master is already protected
-[OK] jessfraz/apk-file:master is already protected
-[UPDATE] jessfraz/certok:master will be changed to protected
+[OK] genuinetools/.vim:master is already protected
+[OK] genuinetools/anonymail:master is already protected
+[OK] genuinetools/apk-file:master is already protected
+[UPDATE] genuinetools/certok:master will be changed to protected
 ...
-[OK] jessfraz/weather:master is already protected
-[OK] jessfraz/ykpiv:master is already protected
+[OK] genuinetools/weather:master is already protected
+[OK] genuinetools/ykpiv:master is already protected
 [OK] maintainerati/wontfix-cabal-site:master is already protected
 ```

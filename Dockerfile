@@ -7,7 +7,7 @@ ENV GOPATH /go
 RUN	apk add --no-cache \
 	ca-certificates
 
-COPY . /go/src/github.com/jessfraz/pepper
+COPY . /go/src/github.com/genuinetools/pepper
 
 RUN set -x \
 	&& apk add --no-cache --virtual .build-deps \
@@ -16,7 +16,7 @@ RUN set -x \
 		libc-dev \
 		libgcc \
 		make \
-	&& cd /go/src/github.com/jessfraz/pepper \
+	&& cd /go/src/github.com/genuinetools/pepper \
 	&& make static \
 	&& mv pepper /usr/bin/pepper \
 	&& apk del .build-deps \
