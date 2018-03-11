@@ -27,8 +27,8 @@ import (
 
 	"golang.org/x/oauth2"
 
-	"github.com/google/go-github/github"
 	"github.com/genuinetools/pepper/version"
+	"github.com/google/go-github/github"
 	"github.com/sirupsen/logrus"
 )
 
