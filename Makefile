@@ -26,8 +26,6 @@ GO_LDFLAGS_STATIC=-ldflags "-w $(CTIMEVAR) -extldflags -static"
 # List the GOOS and GOARCH to build
 GOOSARCHES = darwin/amd64 darwin/386 freebsd/amd64 freebsd/386 linux/arm linux/arm64 linux/amd64 linux/386 solaris/amd64 windows/amd64 windows/386
 
-all: clean build fmt lint test staticcheck vet install ## Runs a clean, build, fmt, lint, test, staticcheck, vet and install
-
 .PHONY: build
 build: $(NAME) ## Builds a dynamic executable or package
 
@@ -41,6 +39,8 @@ static: ## Builds a static executable
 	CGO_ENABLED=0 go build \
 				-tags "$(BUILDTAGS) static_build" \
 				${GO_LDFLAGS_STATIC} -o $(NAME) .
+
+all: clean build fmt lint test staticcheck vet install ## Runs a clean, build, fmt, lint, test, staticcheck, vet and install
 
 .PHONY: fmt
 fmt: ## Verifies all files have men `gofmt`ed
@@ -129,6 +129,12 @@ bump-version: ## Bump the version in the version file. Set BUMP to [ patch | maj
 tag: ## Create a new git tag to prepare to build a release
 	git tag -sa $(VERSION) -m "$(VERSION)"
 	@echo "Run git push origin $(VERSION) to push your new tag to GitHub and trigger a travis build."
+
+.PHONY: AUTHORS
+AUTHORS:
+	@$(file >$@,# This file lists all individuals having contributed content to the repository.)
+	@$(file >>$@,# For how it is generated, see `make AUTHORS`.)
+	@echo "$(shell git log --format='\n%aN <%aE>' | LC_ALL=C.UTF-8 sort -uf)" >> $@
 
 .PHONY: clean
 clean: ## Cleanup any build binaries or packages
