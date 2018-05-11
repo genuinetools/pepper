@@ -23,3 +23,7 @@
 [[override]]
   name = "github.com/Sirupsen/logrus"
   source = "github.com/sirupsen/logrus"
+
+[[constraint]]
+  name = "github.com/google/go-github"
+  branch = "master"
