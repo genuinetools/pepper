@@ -1,3 +1,5 @@
+<p align="left"><img src="logo/horizontal.png" alt="pepper" height="160px"></p>
+
 [![Travis CI](https://travis-ci.org/genuinetools/pepper.svg?branch=master)](https://travis-ci.org/genuinetools/pepper)
 
 Named after Pepper Potts. Set all your GitHub repos master branches to be
