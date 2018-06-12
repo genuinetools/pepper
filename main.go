@@ -9,6 +9,7 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
+	"time"
 
 	"golang.org/x/oauth2"
 
@@ -133,6 +134,10 @@ func main() {
 		// Get the current user
 		user, _, err := client.Users.Get(ctx, "")
 		if err != nil {
+			if v, ok := err.(*github.RateLimitError); ok {
+				logrus.Fatalf("%s Limit: %d; Remaining: %d; Retry After: %s", v.Message, v.Rate.Limit, v.Rate.Remaining, time.Until(v.Rate.Reset.Time).String())
+			}
+
 			logrus.Fatal(err)
 		}
 		username := *user.Login
@@ -144,6 +149,10 @@ func main() {
 	perPage := 100
 	logrus.Debugf("Getting repositories...")
 	if err := getRepositories(ctx, client, page, perPage, affiliation); err != nil {
+		if v, ok := err.(*github.RateLimitError); ok {
+			logrus.Fatalf("%s Limit: %d; Remaining: %d; Retry After: %s", v.Message, v.Rate.Limit, v.Rate.Remaining, time.Until(v.Rate.Reset.Time).String())
+		}
+
 		logrus.Fatal(err)
 	}
 }
