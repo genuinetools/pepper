@@ -96,17 +96,18 @@ func init() {
 
 func main() {
 	// On ^C, or SIGTERM handle exit.
-	c := make(chan os.Signal, 1)
-	signal.Notify(c, os.Interrupt)
-	signal.Notify(c, syscall.SIGTERM)
+	signals := make(chan os.Signal, 0)
+	signal.Notify(signals, os.Interrupt)
+	signal.Notify(signals, syscall.SIGTERM)
+	ctx, cancel := context.WithCancel(context.Background())
 	go func() {
-		for sig := range c {
+		for sig := range signals {
+			cancel()
+			ticker.Stop()
 			logrus.Infof("Received %s, exiting.", sig.String())
 			os.Exit(0)
 		}
 	}()
-
-	ctx := context.Background()
 
 	// Create the http client.
 	ts := oauth2.StaticTokenSource(
