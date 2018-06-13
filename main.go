@@ -103,7 +103,6 @@ func main() {
 	go func() {
 		for sig := range signals {
 			cancel()
-			ticker.Stop()
 			logrus.Infof("Received %s, exiting.", sig.String())
 			os.Exit(0)
 		}
