@@ -17,11 +17,11 @@ all your GitHub repositories.
 
 #### Binaries
 
-- **darwin** [386](https://github.com/genuinetools/pepper/releases/download/v0.5.1/pepper-darwin-386) / [amd64](https://github.com/genuinetools/pepper/releases/download/v0.5.1/pepper-darwin-amd64)
-- **freebsd** [386](https://github.com/genuinetools/pepper/releases/download/v0.5.1/pepper-freebsd-386) / [amd64](https://github.com/genuinetools/pepper/releases/download/v0.5.1/pepper-freebsd-amd64)
-- **linux** [386](https://github.com/genuinetools/pepper/releases/download/v0.5.1/pepper-linux-386) / [amd64](https://github.com/genuinetools/pepper/releases/download/v0.5.1/pepper-linux-amd64) / [arm](https://github.com/genuinetools/pepper/releases/download/v0.5.1/pepper-linux-arm) / [arm64](https://github.com/genuinetools/pepper/releases/download/v0.5.1/pepper-linux-arm64)
-- **solaris** [amd64](https://github.com/genuinetools/pepper/releases/download/v0.5.1/pepper-solaris-amd64)
-- **windows** [386](https://github.com/genuinetools/pepper/releases/download/v0.5.1/pepper-windows-386) / [amd64](https://github.com/genuinetools/pepper/releases/download/v0.5.1/pepper-windows-amd64)
+- **darwin** [386](https://github.com/genuinetools/pepper/releases/download/v0.5.2/pepper-darwin-386) / [amd64](https://github.com/genuinetools/pepper/releases/download/v0.5.2/pepper-darwin-amd64)
+- **freebsd** [386](https://github.com/genuinetools/pepper/releases/download/v0.5.2/pepper-freebsd-386) / [amd64](https://github.com/genuinetools/pepper/releases/download/v0.5.2/pepper-freebsd-amd64)
+- **linux** [386](https://github.com/genuinetools/pepper/releases/download/v0.5.2/pepper-linux-386) / [amd64](https://github.com/genuinetools/pepper/releases/download/v0.5.2/pepper-linux-amd64) / [arm](https://github.com/genuinetools/pepper/releases/download/v0.5.2/pepper-linux-arm) / [arm64](https://github.com/genuinetools/pepper/releases/download/v0.5.2/pepper-linux-arm64)
+- **solaris** [amd64](https://github.com/genuinetools/pepper/releases/download/v0.5.2/pepper-solaris-amd64)
+- **windows** [386](https://github.com/genuinetools/pepper/releases/download/v0.5.2/pepper-windows-386) / [amd64](https://github.com/genuinetools/pepper/releases/download/v0.5.2/pepper-windows-amd64)
 
 #### Via Go
 
@@ -40,7 +40,7 @@ $ pepper -h
 |_|        |_|   |_|
 
  Set all your GitHub repos master branches to be protected.
- Version: v0.5.1
+ Version: v0.5.2
  Build: 8b7274f
 
   -d        run in debug mode
