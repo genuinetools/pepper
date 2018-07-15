@@ -18,39 +18,39 @@ jobs:
       deploy:
         provider: releases
         file:
-          - cross/pepper-linux-amd64.md5
-          - cross/pepper-windows-386.sha256
-          - cross/pepper-linux-arm
-          - cross/pepper-darwin-amd64.md5
           - cross/pepper-darwin-amd64
-          - cross/pepper-solaris-amd64.md5
-          - cross/pepper-linux-arm64.sha256
-          - cross/pepper-linux-arm.sha256
-          - cross/pepper-linux-386.sha256
+          - cross/pepper-darwin-amd64.md5
+          - cross/pepper-darwin-amd64.sha256
+          - cross/pepper-darwin-386
           - cross/pepper-darwin-386.md5
-          - cross/pepper-windows-386.md5
+          - cross/pepper-darwin-386.sha256
+          - cross/pepper-freebsd-amd64
           - cross/pepper-freebsd-amd64.md5
-          - cross/pepper-linux-arm64.md5
-          - cross/pepper-linux-arm64
           - cross/pepper-freebsd-amd64.sha256
-          - cross/pepper-freebsd-386.md5
-          - cross/pepper-linux-amd64.sha256
-          - cross/pepper-linux-386.md5
           - cross/pepper-freebsd-386
+          - cross/pepper-freebsd-386.md5
+          - cross/pepper-freebsd-386.sha256
+          - cross/pepper-linux-arm
+          - cross/pepper-linux-arm.md5
+          - cross/pepper-linux-arm.sha256
+          - cross/pepper-linux-arm64
+          - cross/pepper-linux-arm64.md5
+          - cross/pepper-linux-arm64.sha256
+          - cross/pepper-linux-amd64
+          - cross/pepper-linux-amd64.md5
+          - cross/pepper-linux-amd64.sha256
+          - cross/pepper-linux-386
+          - cross/pepper-linux-386.md5
+          - cross/pepper-linux-386.sha256
+          - cross/pepper-solaris-amd64
+          - cross/pepper-solaris-amd64.md5
           - cross/pepper-solaris-amd64.sha256
           - cross/pepper-windows-amd64
           - cross/pepper-windows-amd64.md5
           - cross/pepper-windows-amd64.sha256
-          - cross/pepper-linux-arm.md5
-          - cross/pepper-darwin-386.sha256
-          - cross/pepper-darwin-amd64.sha256
           - cross/pepper-windows-386
-          - cross/pepper-solaris-amd64
-          - cross/pepper-darwin-386
-          - cross/pepper-linux-386
-          - cross/pepper-freebsd-amd64
-          - cross/pepper-freebsd-386.sha256
-          - cross/pepper-linux-amd64
+          - cross/pepper-windows-386.md5
+          - cross/pepper-windows-386.sha256
         skip_cleanup: true
         on:
           tags: true
