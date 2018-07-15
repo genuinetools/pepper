@@ -2,80 +2,88 @@
 
 
 [[projects]]
-  digest = "1:2c32d6603ec266f5fb435bb2e76d01da42e42343613c76d663c625526bc346e3"
+  branch = "master"
+  digest = "1:ebde2265eca1ac817356ea6306aafb046f3539871ec72f97e241fc1fac1a656a"
+  name = "github.com/genuinetools/pkg"
+  packages = ["cli"]
+  pruneopts = "NUT"
+  revision = "3926dab1fc19efd29fc6940eccaf05e3dd44c044"
+
+[[projects]]
+  digest = "1:15042ad3498153684d09f393bbaec6b216c8eec6d61f63dff711de7d64ed8861"
   name = "github.com/golang/protobuf"
   packages = ["proto"]
-  pruneopts = "NU"
+  pruneopts = "NUT"
   revision = "b4deda0973fb4c70b50d226b1af49f3da59f5265"
   version = "v1.1.0"
 
 [[projects]]
   branch = "master"
-  digest = "1:528c0f99b8cb6604193a9b1efead09c1527500a9413b5ec322ab287995ade095"
+  digest = "1:24d5111a5293827759e572a949a51c4a8a6225c4f54a28a80f1beefb5be709ca"
   name = "github.com/google/go-github"
   packages = ["github"]
-  pruneopts = "NU"
+  pruneopts = "NUT"
   revision = "fe267204ab6dc819efe645730b03eb44cbca91f1"
 
 [[projects]]
   branch = "master"
-  digest = "1:b08ee366b946aaf9fc34ae3db6b6efa8caa193f30e119e02d2751e56737f482a"
+  digest = "1:a63cff6b5d8b95638bfe300385d93b2a6d9d687734b863da8e09dc834510a690"
   name = "github.com/google/go-querystring"
   packages = ["query"]
-  pruneopts = "NU"
+  pruneopts = "NUT"
   revision = "53e6ce116135b80d037921a7fdd5138cf32d7a8a"
 
 [[projects]]
-  digest = "1:fb851541f5df335edb55ae691842a09ba4397bbf2deec9f7c5ad4a49de3fa44d"
+  digest = "1:6989062eb7ccf25cf38bf4fe3dba097ee209f896cda42cefdca3927047bef7b6"
   name = "github.com/sirupsen/logrus"
   packages = ["."]
-  pruneopts = "NU"
+  pruneopts = "NUT"
   revision = "c155da19408a8799da419ed3eeb0cb5db0ad5dbc"
   version = "v1.0.5"
 
 [[projects]]
   branch = "master"
-  digest = "1:ed359abd610d03004c519d6269e99c31d33bb218ba4f889985d30a5ada76d4df"
+  digest = "1:3f3a05ae0b95893d90b9b3b5afdb79a9b3d96e4e36e099d841ae602e4aca0da8"
   name = "golang.org/x/crypto"
   packages = ["ssh/terminal"]
-  pruneopts = "NU"
+  pruneopts = "NUT"
   revision = "a49355c7e3f8fe157a85be2f77e6e269a0f89602"
 
 [[projects]]
   branch = "master"
-  digest = "1:aaae5c96c30675517139732907d3f124b2e49bc919ad4fcb9dddfa7557e40b89"
+  digest = "1:ce1f391e0e8c5e3c635dc2c712b037a2d0fd4241cc5648f23ca071565dd385f2"
   name = "golang.org/x/net"
   packages = [
     "context",
     "context/ctxhttp",
   ]
-  pruneopts = "NU"
+  pruneopts = "NUT"
   revision = "d0887baf81f4598189d4e12a37c6da86f0bba4d0"
 
 [[projects]]
   branch = "master"
-  digest = "1:3db4b69cdc5f36703bc8c1eb8088056c4ab9c81b567c591e5afb5f3fc67c1f4a"
+  digest = "1:38547c7d38f237882ef05ccb754c8e1bedde657075ea02dbd30ac4d753501637"
   name = "golang.org/x/oauth2"
   packages = [
     ".",
     "internal",
   ]
-  pruneopts = "NU"
+  pruneopts = "NUT"
   revision = "ef147856a6ddbb60760db74283d2424e98c87bff"
 
 [[projects]]
   branch = "master"
-  digest = "1:f18a84ee7d48acb0a402e5ae19df6c7df4d6d6db09593f60cd29d2b6e8c1cee4"
+  digest = "1:64107e3c8f52f341891a565d117bf263ed396fe0c16bad19634b25be25debfaa"
   name = "golang.org/x/sys"
   packages = [
     "unix",
     "windows",
   ]
-  pruneopts = "NU"
-  revision = "1b2967e3c290b7c545b3db0deeda16e9be4f98a2"
+  pruneopts = "NUT"
+  revision = "ac767d655b305d4e9612f5f6e33120b9176c4ad4"
 
 [[projects]]
-  digest = "1:7d7f7463c86e96550e45a4e08496c79494bf3be1fca33f3510fc686731bdaed3"
+  digest = "1:55f1ec63dadd78da2ba0f040523d9a990db1a81463b05905ad9006b2c7981789"
   name = "google.golang.org/appengine"
   packages = [
     "internal",
@@ -86,7 +94,7 @@
     "internal/urlfetch",
     "urlfetch",
   ]
-  pruneopts = "NU"
+  pruneopts = "NUT"
   revision = "b1f26356af11148e710935ed1ac8a7f5702c7612"
   version = "v1.1.0"
 
@@ -94,6 +102,7 @@
   analyzer-name = "dep"
   analyzer-version = 1
   input-imports = [
+    "github.com/genuinetools/pkg/cli",
     "github.com/google/go-github/github",
     "github.com/sirupsen/logrus",
     "golang.org/x/oauth2",

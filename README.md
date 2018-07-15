@@ -36,24 +36,22 @@ $ go get github.com/genuinetools/pepper
 
 ```console
 $ pepper -h
- _ __   ___ _ __  _ __   ___ _ __
-| '_ \ / _ \ '_ \| '_ \ / _ \ '__|
-| |_) |  __/ |_) | |_) |  __/ |
-| .__/ \___| .__/| .__/ \___|_|
-|_|        |_|   |_|
+pepper -  Tool to set all GitHub repo master branches to be protected.
 
- Set all your GitHub repos master branches to be protected.
- Version: v0.5.2
- Build: 8b7274f
+Usage: pepper <command>
 
-  -d        run in debug mode
-  -dry-run  do not change branch settings just print the changes that would occur
-  -nouser   do not include your user
-  -orgs     organizations to include
+Flags:
+
+  -d        enable debug logging (default: false)
+  -dry-run  do not change branch settings just print the changes that would occur (default: false)
+  -nouser   do not include your user (default: false)
+  -orgs     organizations to include (default: [])
   -token    GitHub API token (or env var GITHUB_TOKEN)
-  -url      GitHub Enterprise URL
-  -v        print version and exit (shorthand)
-  -version  print version and exit
+  -url      GitHub Enterprise URL (default: <none>)
+
+Commands:
+
+  version  Show the version information.
 ```
 
 ```console

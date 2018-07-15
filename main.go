@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"errors"
 	"flag"
 	"fmt"
 	"net/http"
@@ -14,23 +15,9 @@ import (
 	"golang.org/x/oauth2"
 
 	"github.com/genuinetools/pepper/version"
+	"github.com/genuinetools/pkg/cli"
 	"github.com/google/go-github/github"
 	"github.com/sirupsen/logrus"
-)
-
-const (
-	// BANNER is what is printed for help/info output.
-	BANNER = ` _ __   ___ _ __  _ __   ___ _ __
-| '_ \ / _ \ '_ \| '_ \ / _ \ '__|
-| |_) |  __/ |_) | |_) |  __/ |
-| .__/ \___| .__/| .__/ \___|_|
-|_|        |_|   |_|
-
- Set all your GitHub repos master branches to be protected.
- Version: %s
- Build: %s
-
-`
 )
 
 var (
@@ -41,7 +28,6 @@ var (
 	dryrun bool
 
 	debug bool
-	vrsn  bool
 )
 
 // stringSlice is a slice of strings
@@ -56,105 +42,113 @@ func (s *stringSlice) Set(value string) error {
 	return nil
 }
 
-func init() {
-	// parse flags
-	flag.StringVar(&token, "token", os.Getenv("GITHUB_TOKEN"), "GitHub API token (or env var GITHUB_TOKEN)")
-	flag.StringVar(&enturl, "url", "", "GitHub Enterprise URL")
-	flag.Var(&orgs, "orgs", "organizations to include")
-	flag.BoolVar(&nouser, "nouser", false, "do not include your user")
-	flag.BoolVar(&dryrun, "dry-run", false, "do not change branch settings just print the changes that would occur")
-
-	flag.BoolVar(&vrsn, "version", false, "print version and exit")
-	flag.BoolVar(&vrsn, "v", false, "print version and exit (shorthand)")
-	flag.BoolVar(&debug, "d", false, "run in debug mode")
-
-	flag.Usage = func() {
-		fmt.Fprint(os.Stderr, fmt.Sprintf(BANNER, version.VERSION, version.GITCOMMIT))
-		flag.PrintDefaults()
-	}
-
-	flag.Parse()
-
-	if vrsn {
-		fmt.Printf("pepper version %s, build %s", version.VERSION, version.GITCOMMIT)
-		os.Exit(0)
-	}
-
-	// set log level
-	if debug {
-		logrus.SetLevel(logrus.DebugLevel)
-	}
-
-	if token == "" {
-		usageAndExit("GitHub token cannot be empty.", 1)
-	}
-
-	if nouser && orgs == nil {
-		usageAndExit("no organizations provided", 1)
-	}
-}
-
 func main() {
-	// On ^C, or SIGTERM handle exit.
-	signals := make(chan os.Signal, 0)
-	signal.Notify(signals, os.Interrupt)
-	signal.Notify(signals, syscall.SIGTERM)
-	ctx, cancel := context.WithCancel(context.Background())
-	go func() {
-		for sig := range signals {
-			cancel()
-			logrus.Infof("Received %s, exiting.", sig.String())
-			os.Exit(0)
-		}
-	}()
+	// Create a new cli program.
+	p := cli.NewProgram()
+	p.Name = "pepper"
+	p.Description = "Tool to set all GitHub repo master branches to be protected"
 
-	// Create the http client.
-	ts := oauth2.StaticTokenSource(
-		&oauth2.Token{AccessToken: token},
-	)
-	tc := oauth2.NewClient(ctx, ts)
+	// Set the GitCommit and Version.
+	p.GitCommit = version.GITCOMMIT
+	p.Version = version.VERSION
 
-	// Create the github client.
-	client := github.NewClient(tc)
-	if enturl != "" {
-		var err error
-		client.BaseURL, err = url.Parse(enturl + "/api/v3/")
-		if err != nil {
-			logrus.Fatal(err)
+	// Setup the global flags.
+	p.FlagSet = flag.NewFlagSet("ship", flag.ExitOnError)
+	p.FlagSet.StringVar(&token, "token", os.Getenv("GITHUB_TOKEN"), "GitHub API token (or env var GITHUB_TOKEN)")
+	p.FlagSet.StringVar(&enturl, "url", "", "GitHub Enterprise URL")
+	p.FlagSet.Var(&orgs, "orgs", "organizations to include")
+	p.FlagSet.BoolVar(&nouser, "nouser", false, "do not include your user")
+	p.FlagSet.BoolVar(&dryrun, "dry-run", false, "do not change branch settings just print the changes that would occur")
+
+	p.FlagSet.BoolVar(&debug, "d", false, "enable debug logging")
+
+	// Set the before function.
+	p.Before = func(ctx context.Context) error {
+		// Set the log level.
+		if debug {
+			logrus.SetLevel(logrus.DebugLevel)
 		}
+
+		if token == "" {
+			return errors.New("GitHub token cannot be empty")
+		}
+
+		if nouser && orgs == nil {
+			return errors.New("no organizations provided")
+		}
+
+		return nil
 	}
 
-	// Affiliation must be set before we add the user to the "orgs".
-	affiliation := "owner,collaborator"
-	if len(orgs) > 0 {
-		affiliation += ",organization_member"
-	}
+	// Set the main program action.
+	p.Action = func(ctx context.Context) error {
+		// On ^C, or SIGTERM handle exit.
+		signals := make(chan os.Signal, 0)
+		signal.Notify(signals, os.Interrupt)
+		signal.Notify(signals, syscall.SIGTERM)
+		var cancel context.CancelFunc
+		ctx, cancel = context.WithCancel(ctx)
+		go func() {
+			for sig := range signals {
+				cancel()
+				logrus.Infof("Received %s, exiting.", sig.String())
+				os.Exit(0)
+			}
+		}()
 
-	if !nouser {
-		// Get the current user
-		user, _, err := client.Users.Get(ctx, "")
-		if err != nil {
+		// Create the http client.
+		ts := oauth2.StaticTokenSource(
+			&oauth2.Token{AccessToken: token},
+		)
+		tc := oauth2.NewClient(ctx, ts)
+
+		// Create the github client.
+		client := github.NewClient(tc)
+		if enturl != "" {
+			var err error
+			client.BaseURL, err = url.Parse(enturl + "/api/v3/")
+			if err != nil {
+				logrus.Fatal(err)
+			}
+		}
+
+		// Affiliation must be set before we add the user to the "orgs".
+		affiliation := "owner,collaborator"
+		if len(orgs) > 0 {
+			affiliation += ",organization_member"
+		}
+
+		if !nouser {
+			// Get the current user
+			user, _, err := client.Users.Get(ctx, "")
+			if err != nil {
+				if v, ok := err.(*github.RateLimitError); ok {
+					logrus.Fatalf("%s Limit: %d; Remaining: %d; Retry After: %s", v.Message, v.Rate.Limit, v.Rate.Remaining, time.Until(v.Rate.Reset.Time).String())
+				}
+
+				logrus.Fatal(err)
+			}
+			username := *user.Login
+			// add the current user to orgs
+			orgs = append(orgs, username)
+		}
+
+		page := 1
+		perPage := 100
+		logrus.Debugf("Getting repositories...")
+		if err := getRepositories(ctx, client, page, perPage, affiliation); err != nil {
 			if v, ok := err.(*github.RateLimitError); ok {
 				logrus.Fatalf("%s Limit: %d; Remaining: %d; Retry After: %s", v.Message, v.Rate.Limit, v.Rate.Remaining, time.Until(v.Rate.Reset.Time).String())
 			}
 
 			logrus.Fatal(err)
 		}
-		username := *user.Login
-		// add the current user to orgs
-		orgs = append(orgs, username)
+
+		return nil
 	}
 
-	page := 1
-	perPage := 100
-	logrus.Debugf("Getting repositories...")
-	if err := getRepositories(ctx, client, page, perPage, affiliation); err != nil {
-		if v, ok := err.(*github.RateLimitError); ok {
-			logrus.Fatalf("%s Limit: %d; Remaining: %d; Retry After: %s", v.Message, v.Rate.Limit, v.Rate.Remaining, time.Until(v.Rate.Reset.Time).String())
-		}
-
-		logrus.Fatal(err)
-	}
+	// Run our program.
+	p.Run()
 }
 
 func getRepositories(ctx context.Context, client *github.Client, page, perPage int, affiliation string) error {
@@ -242,14 +236,4 @@ func in(a stringSlice, s string) bool {
 		}
 	}
 	return false
-}
-
-func usageAndExit(message string, exitCode int) {
-	if message != "" {
-		fmt.Fprintf(os.Stderr, message)
-		fmt.Fprintf(os.Stderr, "\n\n")
-	}
-	flag.Usage()
-	fmt.Fprintf(os.Stderr, "\n")
-	os.Exit(exitCode)
 }
