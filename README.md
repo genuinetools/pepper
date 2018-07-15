@@ -1,6 +1,8 @@
 <p align="left"><img src="logo/horizontal.png" alt="pepper" height="160px"></p>
 
-[![Travis CI](https://travis-ci.org/genuinetools/pepper.svg?branch=master)](https://travis-ci.org/genuinetools/pepper)
+[![Travis CI](https://img.shields.io/travis/genuinetools/pepper.svg?style=for-the-badge)](https://travis-ci.org/genuinetools/pepper)
+[![GoDoc](https://img.shields.io/badge/godoc-reference-5272B4.svg?style=for-the-badge)](https://godoc.org/github.com/genuinetools/pepper)
+[![Github All Releases](https://img.shields.io/github/downloads/genuinetools/pepper/total.svg?style=for-the-badge)](https://github.com/genuinetools/pepper/releases)
 
 Named after Pepper Potts. Set all your GitHub repos master branches to be
 protected.
@@ -16,6 +18,8 @@ all your GitHub repositories.
 ## Installation
 
 #### Binaries
+
+For installation instructions from binaries please visit the [Releases Page](https://github.com/genuinetools/pepper/releases).
 
 - **darwin** [386](https://github.com/genuinetools/pepper/releases/download/v0.5.2/pepper-darwin-386) / [amd64](https://github.com/genuinetools/pepper/releases/download/v0.5.2/pepper-darwin-amd64)
 - **freebsd** [386](https://github.com/genuinetools/pepper/releases/download/v0.5.2/pepper-freebsd-386) / [amd64](https://github.com/genuinetools/pepper/releases/download/v0.5.2/pepper-freebsd-amd64)
