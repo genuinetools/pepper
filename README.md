@@ -15,21 +15,20 @@ Also see [genuinetools/audit](https://github.com/genuinetools/audit) for checkin
 collaborators, hooks, deploy keys, and protected branched you have added on
 all your GitHub repositories.
 
+ * [Installation](README.md#installation)
+      * [Binaries](README.md#binaries)
+      * [Via Go](README.md#via-go)
+ * [Usage](README.md#usage)
+
 ## Installation
 
 #### Binaries
 
 For installation instructions from binaries please visit the [Releases Page](https://github.com/genuinetools/pepper/releases).
 
-- **darwin** [386](https://github.com/genuinetools/pepper/releases/download/v0.5.2/pepper-darwin-386) / [amd64](https://github.com/genuinetools/pepper/releases/download/v0.5.2/pepper-darwin-amd64)
-- **freebsd** [386](https://github.com/genuinetools/pepper/releases/download/v0.5.2/pepper-freebsd-386) / [amd64](https://github.com/genuinetools/pepper/releases/download/v0.5.2/pepper-freebsd-amd64)
-- **linux** [386](https://github.com/genuinetools/pepper/releases/download/v0.5.2/pepper-linux-386) / [amd64](https://github.com/genuinetools/pepper/releases/download/v0.5.2/pepper-linux-amd64) / [arm](https://github.com/genuinetools/pepper/releases/download/v0.5.2/pepper-linux-arm) / [arm64](https://github.com/genuinetools/pepper/releases/download/v0.5.2/pepper-linux-arm64)
-- **solaris** [amd64](https://github.com/genuinetools/pepper/releases/download/v0.5.2/pepper-solaris-amd64)
-- **windows** [386](https://github.com/genuinetools/pepper/releases/download/v0.5.2/pepper-windows-386) / [amd64](https://github.com/genuinetools/pepper/releases/download/v0.5.2/pepper-windows-amd64)
-
 #### Via Go
 
-```bash
+```console
 $ go get github.com/genuinetools/pepper
 ```
 
