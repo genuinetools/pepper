@@ -54,7 +54,7 @@ Flags:
   --dry-run  do not change settings just print the changes that would occur (default: false)
   --nouser   do not include your user (default: false)
   --orgs     organizations to include (default: [])
-  --token    GitHub API token (or env var GITHUB_TOKEN) (default: 1b503bcc1f191b7d48188fa6a71dedef8b3f906f)
+  --token    GitHub API token (or env var GITHUB_TOKEN) 
   --url      GitHub Enterprise URL (default: <none>)
 
 Commands:
@@ -100,7 +100,7 @@ Flags:
   --orgs     organizations to include (default: [])
   --pull     Team members can pull, but not push to or administer this repository (default: false)
   --push     Team members can pull and push, but not administer this repository (default: false)
-  --token    GitHub API token (or env var GITHUB_TOKEN) (default: 1b503bcc1f191b7d48188fa6a71dedef8b3f906f)
+  --token    GitHub API token (or env var GITHUB_TOKEN)
   --url      GitHub Enterprise URL (default: <none>)
 ```
 
@@ -134,7 +134,7 @@ Flags:
   -orgs     organizations to include (default: [])
   -rebase   Allow rebase merging, add all commits from the head branch onto the base branch individually (default: false)
   -squash   Allow squash merging, combine all commits from the head branch into a single commit in the base branch (default: false)
-  -token    GitHub API token (or env var GITHUB_TOKEN) (default: 1b503bcc1f191b7d48188fa6a71dedef8b3f906f)
+  -token    GitHub API token (or env var GITHUB_TOKEN)
   -url      GitHub Enterprise URL (default: <none>)
 ```
 
