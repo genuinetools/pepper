@@ -4,8 +4,13 @@
 [![GoDoc](https://img.shields.io/badge/godoc-reference-5272B4.svg?style=for-the-badge)](https://godoc.org/github.com/genuinetools/pepper)
 [![Github All Releases](https://img.shields.io/github/downloads/genuinetools/pepper/total.svg?style=for-the-badge)](https://github.com/genuinetools/pepper/releases)
 
-Named after Pepper Potts. Set all your GitHub repos master branches to be
-protected.
+Named after Pepper Potts. A tool to set all GitHub settings for multiple repos at once. 
+
+Actions include:
+
+- [Protecting all master branches](#protect)
+- [Adding a collaborator](#collaborators)
+- [Setting merge settings (WIP)](#merge)
 
 You can set which orgs to include and use `--dry-run` to see the
 changes before they are actually made. Your user is automatically added to the
@@ -19,6 +24,9 @@ all your GitHub repositories.
       * [Binaries](README.md#binaries)
       * [Via Go](README.md#via-go)
  * [Usage](README.md#usage)
+   * [Protect](README.md#protect)
+   * [Collaborators](README.md#collaborators)
+   * [Merge](README.md#merge)
 
 ## Installation
 
@@ -36,26 +44,32 @@ $ go get github.com/genuinetools/pepper
 
 ```console
 $ pepper -h
-pepper -  Tool to set all GitHub repo master branches to be protected.
+pepper -  A tool to set all GitHub settings for multiple repos at once.
 
 Usage: pepper <command>
 
 Flags:
 
-  -d        enable debug logging (default: false)
-  -dry-run  do not change branch settings just print the changes that would occur (default: false)
-  -nouser   do not include your user (default: false)
-  -orgs     organizations to include (default: [])
-  -token    GitHub API token (or env var GITHUB_TOKEN)
-  -url      GitHub Enterprise URL (default: <none>)
+  -d         enable debug logging (default: false)
+  --dry-run  do not change settings just print the changes that would occur (default: false)
+  --nouser   do not include your user (default: false)
+  --orgs     organizations to include (default: [])
+  --token    GitHub API token (or env var GITHUB_TOKEN) (default: 1b503bcc1f191b7d48188fa6a71dedef8b3f906f)
+  --url      GitHub Enterprise URL (default: <none>)
 
 Commands:
 
-  version  Show the version information.
+  collaborators  Add a collaborator to all the repositories.
+  protect        Protect the master branch.
+  version        Show the version information.
 ```
 
+### Protect
+
+Protect all master branches.
+
 ```console
-$ pepper --dry-run --token 12345 --orgs jessconf --orgs maintainerati
+$ pepper protect --dry-run --token 12345 --orgs jessconf --orgs maintainerati
 [OK] jessconf/jessconf:master is already protected
 [OK] genuinetools/.vim:master is already protected
 [OK] genuinetools/anonymail:master is already protected
@@ -65,4 +79,72 @@ $ pepper --dry-run --token 12345 --orgs jessconf --orgs maintainerati
 [OK] genuinetools/weather:master is already protected
 [OK] genuinetools/ykpiv:master is already protected
 [OK] maintainerati/wontfix-cabal-site:master is already protected
+```
+
+### Collaborators
+
+Add a collaborator to all the repositories.
+
+```console
+$ pepper collaborators -h
+Usage: pepper collaborators [OPTIONS] COLLABORATOR
+
+Add a collaborator to all the repositories.
+
+Flags:
+
+  --admin    Team members can pull, push and administer this repository (default: false)
+  -d         enable debug logging (default: false)
+  --dry-run  do not change settings just print the changes that would occur (default: false)
+  --nouser   do not include your user (default: false)
+  --orgs     organizations to include (default: [])
+  --pull     Team members can pull, but not push to or administer this repository (default: false)
+  --push     Team members can pull and push, but not administer this repository (default: false)
+  --token    GitHub API token (or env var GITHUB_TOKEN) (default: 1b503bcc1f191b7d48188fa6a71dedef8b3f906f)
+  --url      GitHub Enterprise URL (default: <none>)
+```
+
+```console
+$ pepper collaborators --dry-run --admin j3ssb0t
+...t 
+[UPDATE] jessfraz/blog will have j3ssb0t added as a collaborator (admin)
+[UPDATE] jessfraz/bolt will have j3ssb0t added as a collaborator (admin)
+[UPDATE] jessfraz/boulder will have j3ssb0t added as a collaborator (admin)
+[UPDATE] jessfraz/buildkit will have j3ssb0t added as a collaborator (admin)
+[UPDATE] jessfraz/cadvisor will have j3ssb0t added as a collaborator (admin)
+...
+```
+
+### Merge
+
+Update all merge settings to allow specific types only.
+
+```console
+$ pepper merge -h
+Usage: pepper merge [OPTIONS]
+
+Update all merge settings to allow specific types only.
+
+Flags:
+
+  -commits  Allow merge commits, add all commits from the head branch to the base branch with a merge commit (default: false)
+  -d        enable debug logging (default: false)
+  -dry-run  do not change settings just print the changes that would occur (default: false)
+  -nouser   do not include your user (default: false)
+  -orgs     organizations to include (default: [])
+  -rebase   Allow rebase merging, add all commits from the head branch onto the base branch individually (default: false)
+  -squash   Allow squash merging, combine all commits from the head branch into a single commit in the base branch (default: false)
+  -token    GitHub API token (or env var GITHUB_TOKEN) (default: 1b503bcc1f191b7d48188fa6a71dedef8b3f906f)
+  -url      GitHub Enterprise URL (default: <none>)
+```
+
+```console
+$ pepper merge --dry-run --squash
+UPDATE] jessfraz/.vim will be changed to squash
+[OK] jessfraz/1up is already set to squash
+[UPDATE] jessfraz/acs-engine will be changed to squash
+[UPDATE] jessfraz/acs-ignite-demos will be changed to squash
+[UPDATE] jessfraz/apparmor-docs will be changed to squash
+[UPDATE] jessfraz/baselayout will be changed to squash
+...
 ```
