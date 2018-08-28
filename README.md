@@ -10,7 +10,7 @@ Actions include:
 
 - [Protecting all master branches](#protect)
 - [Adding a collaborator](#collaborators)
-- [Setting merge settings (WIP)](#merge)
+- [Setting merge settings](#merge)
 
 You can set which orgs to include and use `--dry-run` to see the
 changes before they are actually made. Your user is automatically added to the
