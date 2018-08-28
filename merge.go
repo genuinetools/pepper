@@ -17,7 +17,7 @@ func (cmd *mergeCommand) Name() string      { return "merge" }
 func (cmd *mergeCommand) Args() string      { return "[OPTIONS]" }
 func (cmd *mergeCommand) ShortHelp() string { return mergeHelp }
 func (cmd *mergeCommand) LongHelp() string  { return mergeHelp }
-func (cmd *mergeCommand) Hidden() bool      { return true }
+func (cmd *mergeCommand) Hidden() bool      { return false }
 
 func (cmd *mergeCommand) Register(fs *flag.FlagSet) {
 	fs.BoolVar(&cmd.commits, "commits", false, "Allow merge commits, add all commits from the head branch to the base branch with a merge commit")
@@ -49,7 +49,6 @@ func (cmd *mergeCommand) handleRepoMergeOpt(ctx context.Context, client *github.
 
 		return nil
 	}
-
 	if err != nil {
 		return err
 	}
@@ -86,7 +85,22 @@ func (cmd *mergeCommand) handleRepoMergeOpt(ctx context.Context, client *github.
 		return nil
 	}
 
-	// TODO: actually update the merge settings when the API allows it.
+	// Edit the repo settings.
+	repo.AllowRebaseMerge = &cmd.rebase
+	repo.AllowSquashMerge = &cmd.squash
+	repo.AllowMergeCommit = &cmd.commits
+	repo, resp, err = client.Repositories.Edit(ctx, repo.GetOwner().GetLogin(), repo.GetName(), repo)
+	if resp.StatusCode == http.StatusNotFound || resp.StatusCode == http.StatusForbidden || err != nil {
+		if _, ok := err.(*github.RateLimitError); ok {
+			return err
+		}
+
+		return nil
+	}
+	if err != nil {
+		return err
+	}
+	fmt.Printf("[OK] %s is set to %s\n", *repo.FullName, strings.Join(opt, " | "))
 
 	return nil
 }

@@ -60,6 +60,7 @@ Flags:
 Commands:
 
   collaborators  Add a collaborator to all the repositories.
+  merge          Update all merge settings to allow specific types only.
   protect        Protect the master branch.
   version        Show the version information.
 ```
