@@ -27,6 +27,10 @@ func (cmd *protectCommand) Run(ctx context.Context, args []string) error {
 
 // handleRepo will return nil error if the user does not have access to something.
 func handleRepoProtectBranch(ctx context.Context, client *github.Client, repo *github.Repository) error {
+	if !in(orgs, *repo.Owner.Login) {
+		return nil
+	}
+
 	opt := &github.ListOptions{
 		PerPage: 100,
 	}
@@ -40,7 +44,7 @@ func handleRepoProtectBranch(ctx context.Context, client *github.Client, repo *g
 	}
 
 	for _, branch := range branches {
-		if branch.GetName() == "master" && in(orgs, *repo.Owner.Login) {
+		if branch.GetName() == "master" {
 			// we must get the individual branch for the branch protection to work
 			b, _, err := client.Repositories.GetBranch(ctx, *repo.Owner.Login, *repo.Name, branch.GetName())
 			if err != nil {
