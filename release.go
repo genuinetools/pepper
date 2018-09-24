@@ -10,9 +10,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"strings"
-	"time"
 
-	units "github.com/docker/go-units"
 	"github.com/google/go-github/github"
 	"github.com/sirupsen/logrus"
 )
@@ -53,16 +51,20 @@ func (cmd *releaseCommand) ShortHelp() string { return releaseHelp }
 func (cmd *releaseCommand) LongHelp() string  { return releaseHelp }
 func (cmd *releaseCommand) Hidden() bool      { return false }
 
-func (cmd *releaseCommand) Register(fs *flag.FlagSet) {}
+func (cmd *releaseCommand) Register(fs *flag.FlagSet) {
+	fs.BoolVar(&cmd.all, "all", false, "Update all the releases, not just the latest")
+}
 
-type releaseCommand struct{}
+type releaseCommand struct {
+	all bool
+}
 
 func (cmd *releaseCommand) Run(ctx context.Context, args []string) error {
-	return runCommand(ctx, handleRelease)
+	return runCommand(ctx, cmd.handleRelease)
 }
 
 // handleRelease will return nil error if the user does not have access to something.
-func handleRelease(ctx context.Context, client *github.Client, repo *github.Repository) error {
+func (cmd *releaseCommand) handleRelease(ctx context.Context, client *github.Client, repo *github.Repository) error {
 	opt := &github.ListOptions{
 		Page:    1,
 		PerPage: 100,
@@ -81,30 +83,14 @@ func handleRelease(ctx context.Context, client *github.Client, repo *github.Repo
 		return err
 	}
 
-	rl := release{
-		Repository: repo,
-	}
 	// Get information about the binary assets.
-	arch := "linux-amd64"
-	for i := 0; i < len(releases); i++ {
-		r := releases[i]
-
-		isLatest := false
-		if rl.Release == nil && r.GetDraft() {
-			// If this is the latest release and it's not a draft make it the one
-			// to return
-			rl.Release = r
-			isLatest = true
-		}
-
+	for _, r := range releases {
 		// This holds data like os -> arch -> release and we will use it for rendering our
 		// release body template.
 		allReleases := map[string]map[string]release{}
 
 		// Iterate over the assets.
 		for _, asset := range r.Assets {
-			rl.BinaryDownloadCount += asset.GetDownloadCount()
-
 			if !strings.Contains(asset.GetName(), ".") {
 				// We know we are on a binary and not a hashsum.
 				suffix := strings.SplitN(strings.TrimPrefix(asset.GetName(), repo.GetName()+"-"), "-", 2)
@@ -163,37 +149,16 @@ func handleRelease(ctx context.Context, client *github.Client, repo *github.Repo
 					}
 				}
 			}
-
-			if isLatest && strings.HasSuffix(asset.GetName(), arch) {
-				rl.BinaryURL = asset.GetBrowserDownloadURL()
-				rl.BinaryName = asset.GetName()
-				rl.BinarySince = units.HumanDuration(time.Since(asset.GetCreatedAt().Time))
-			}
-
-			if isLatest && strings.HasSuffix(asset.GetName(), arch+".sha256") {
-				c, err := getURLContent(asset.GetBrowserDownloadURL())
-				if err != nil {
-					return err
-				}
-				rl.BinarySHA256 = c
-			}
-
-			if isLatest && strings.HasSuffix(asset.GetName(), arch+".md5") {
-				c, err := getURLContent(asset.GetBrowserDownloadURL())
-				if err != nil {
-					return err
-				}
-				rl.BinaryMD5 = c
-			}
 		}
 
 		if err := updateRelease(ctx, client, repo, r, allReleases); err != nil {
 			return err
 		}
 
-		fmt.Printf("Updated release %s/%s for repo: %s", r.GetName(), r.GetTagName(), repo.GetFullName())
-		if isLatest {
-			// If we updated the latest release, stop.
+		fmt.Printf("Updated release %s/%s for repo: %s\n", r.GetName(), r.GetTagName(), repo.GetFullName())
+
+		// We updated the latest release, stop.
+		if !cmd.all {
 			break
 		}
 	}
@@ -202,14 +167,13 @@ func handleRelease(ctx context.Context, client *github.Client, repo *github.Repo
 }
 
 type release struct {
-	Repository          *github.Repository
-	Release             *github.RepositoryRelease
-	BinaryName          string
-	BinaryURL           string
-	BinarySHA256        string
-	BinaryMD5           string
-	BinaryDownloadCount int
-	BinarySince         string
+	Repository   *github.Repository
+	Release      *github.RepositoryRelease
+	BinaryName   string
+	BinaryURL    string
+	BinarySHA256 string
+	BinaryMD5    string
+	BinarySince  string
 }
 
 func updateRelease(ctx context.Context, client *github.Client, repo *github.Repository, r *github.RepositoryRelease, releases map[string]map[string]release) error {
