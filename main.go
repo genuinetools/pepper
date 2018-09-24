@@ -194,7 +194,7 @@ func getRepositories(ctx context.Context, client *github.Client, page, perPage i
 	}
 
 	for _, repo := range repos {
-		if !in(orgs, *repo.Owner.Login) {
+		if !in(orgs, *repo.Owner.Login) && len(singleRepo) < 1 {
 			continue
 		}
 
