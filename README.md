@@ -27,7 +27,7 @@ all your GitHub repositories.
    * [Protect](README.md#protect)
    * [Collaborators](README.md#collaborators)
    * [Merge](README.md#merge)
-   * [Update Release](README.md#update-relase)
+   * [Update Release](README.md#update-release)
 
 ## Installation
 
@@ -161,4 +161,5 @@ Update the release body according to the template.
 
 ```console
 $ pepper release --repo genuinetools/img
+Updated release v0.5.0/v0.5.0 for repo: genuinetools/img
 ```
