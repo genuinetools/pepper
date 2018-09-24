@@ -3,11 +3,19 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:6ef4d6cb61f89688f3256f2e8ed147ed75700f3231523ed6234091575160a5fb"
+  digest = "1:4340101f42556a9cb2f7a360a0e95a019bfef6247d92e6c4c46f2433cf86a482"
+  name = "github.com/docker/go-units"
+  packages = ["."]
+  pruneopts = "NUT"
+  revision = "47565b4f722fb6ceae66b95f853feed578a4a51c"
+
+[[projects]]
+  branch = "master"
+  digest = "1:bd228d1a02fffcaf3abca973886870113d843ea7a67d5b6f70a5169950499ea9"
   name = "github.com/genuinetools/pkg"
   packages = ["cli"]
   pruneopts = "NUT"
-  revision = "4038376dadd53f913de41663feae408ef23c8e8a"
+  revision = "1c141f661797b5fb22033c9a7a5ab004994a0404"
 
 [[projects]]
   digest = "1:97df918963298c287643883209a2c3f642e6593379f97ab400c2a2e219ab647d"
@@ -19,19 +27,19 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:4be3c01ef56542da4f1268c52a8b88bae5309ec3dade7755e250bc933e13ac70"
+  digest = "1:fb75390fa101c53b06d5599b09585c4018c6fe2e53132f17436593b71ee4f539"
   name = "github.com/google/go-github"
   packages = ["github"]
   pruneopts = "NUT"
-  revision = "08dbadce1a0514f79ea9a9aa91b2f12ba656d5a7"
+  revision = "3e48b156a33e9bd9896e199e8ed3f9201946a35a"
 
 [[projects]]
-  branch = "master"
   digest = "1:a63cff6b5d8b95638bfe300385d93b2a6d9d687734b863da8e09dc834510a690"
   name = "github.com/google/go-querystring"
   packages = ["query"]
   pruneopts = "NUT"
-  revision = "53e6ce116135b80d037921a7fdd5138cf32d7a8a"
+  revision = "44c6ddd0a2342c386950e880b658017258da92fc"
+  version = "v1.0.0"
 
 [[projects]]
   digest = "1:b2339e83ce9b5c4f79405f949429a7f68a9a904fed903c672aac1e7ceb7f5f02"
@@ -47,7 +55,7 @@
   name = "golang.org/x/crypto"
   packages = ["ssh/terminal"]
   pruneopts = "NUT"
-  revision = "614d502a4dac94afa3a6ce146bd1736da82514c6"
+  revision = "0e37d006457bf46f9e6692014ba72ef82c33022c"
 
 [[projects]]
   branch = "master"
@@ -58,7 +66,7 @@
     "context/ctxhttp",
   ]
   pruneopts = "NUT"
-  revision = "8a410e7b638dca158bf9e766925842f6651ff828"
+  revision = "2f5d2388922f370f4355f327fcf4cfe9f5583908"
 
 [[projects]]
   branch = "master"
@@ -73,17 +81,17 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:bc0ffa2e77f9cad8786c8949b1dc3c5843993355b6ae4d7f6d45ab5ba2dd4a51"
+  digest = "1:d468ba3543e2daeb578caa65430a5ed88bd3cce35700e7e84d1b377c03b1f230"
   name = "golang.org/x/sys"
   packages = [
     "unix",
     "windows",
   ]
   pruneopts = "NUT"
-  revision = "4910a1d54f876d7b22162a85f4d066d3ee649450"
+  revision = "90868a75fefd03942536221d7c0e2f84ec62a668"
 
 [[projects]]
-  digest = "1:af71cb57ffcbc389c2f8af1e6a763c0d2e6f08d2ceb64140c0fd4c57fdbc2898"
+  digest = "1:36354a269794d9cb4cebae233f65a966e818f763088370c8524726853a31c96f"
   name = "google.golang.org/appengine"
   packages = [
     "internal",
@@ -95,13 +103,14 @@
     "urlfetch",
   ]
   pruneopts = "NUT"
-  revision = "b1f26356af11148e710935ed1ac8a7f5702c7612"
-  version = "v1.1.0"
+  revision = "ae0ab99deb4dc413a2b4bd6c8bdd0eb67f1e4d06"
+  version = "v1.2.0"
 
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
   input-imports = [
+    "github.com/docker/go-units",
     "github.com/genuinetools/pkg/cli",
     "github.com/google/go-github/github",
     "github.com/sirupsen/logrus",

@@ -4,7 +4,7 @@
 [![GoDoc](https://img.shields.io/badge/godoc-reference-5272B4.svg?style=for-the-badge)](https://godoc.org/github.com/genuinetools/pepper)
 [![Github All Releases](https://img.shields.io/github/downloads/genuinetools/pepper/total.svg?style=for-the-badge)](https://github.com/genuinetools/pepper/releases)
 
-Named after Pepper Potts. A tool to set all GitHub settings for multiple repos at once. 
+Named after Pepper Potts.  A tool for performing actions on GitHub repos or a single repo. 
 
 Actions include:
 
@@ -27,6 +27,7 @@ all your GitHub repositories.
    * [Protect](README.md#protect)
    * [Collaborators](README.md#collaborators)
    * [Merge](README.md#merge)
+   * [Update Release](README.md#update-relase)
 
 ## Installation
 
@@ -44,24 +45,26 @@ $ go get github.com/genuinetools/pepper
 
 ```console
 $ pepper -h
-pepper -  A tool to set all GitHub settings for multiple repos at once.
+pepper -  A tool for performing actions on GitHub repos or a single repo.
 
 Usage: pepper <command>
 
 Flags:
 
-  -d         enable debug logging (default: false)
-  --dry-run  do not change settings just print the changes that would occur (default: false)
-  --nouser   do not include your user (default: false)
-  --orgs     organizations to include (default: [])
-  --token    GitHub API token (or env var GITHUB_TOKEN) 
-  --url      GitHub Enterprise URL (default: <none>)
+  -d, --debug  enable debug logging (default: false)
+  --dry-run    do not change settings just print the changes that would occur (default: false)
+  --nouser     do not include your user (default: false)
+  --orgs       organizations to include (default: [])
+  -r, --repo   specific repo (e.g. 'genuinetools/img') (default: <none>)
+  -t, --token  GitHub API token (or env var GITHUB_TOKEN) (default: <none>)
+  -u, --url    GitHub Enterprise URL (default: <none>)
 
 Commands:
 
   collaborators  Add a collaborator to all the repositories.
   merge          Update all merge settings to allow specific types only.
   protect        Protect the master branch.
+  release        Update the release body information.
   version        Show the version information.
 ```
 
@@ -94,15 +97,16 @@ Add a collaborator to all the repositories.
 
 Flags:
 
-  --admin    Team members can pull, push and administer this repository (default: false)
-  -d         enable debug logging (default: false)
-  --dry-run  do not change settings just print the changes that would occur (default: false)
-  --nouser   do not include your user (default: false)
-  --orgs     organizations to include (default: [])
-  --pull     Team members can pull, but not push to or administer this repository (default: false)
-  --push     Team members can pull and push, but not administer this repository (default: false)
-  --token    GitHub API token (or env var GITHUB_TOKEN)
-  --url      GitHub Enterprise URL (default: <none>)
+  --admin      Team members can pull, push and administer this repository (default: false)
+  -d, --debug  enable debug logging (default: false)
+  --dry-run    do not change settings just print the changes that would occur (default: false)
+  --nouser     do not include your user (default: false)
+  --orgs       organizations to include (default: [])
+  --pull       Team members can pull, but not push to or administer this repository (default: false)
+  --push       Team members can pull and push, but not administer this repository (default: false)
+  -r, --repo   specific repo (e.g. 'genuinetools/img') (default: <none>)
+  -t, --token  GitHub API token (or env var GITHUB_TOKEN) (default: <none>)
+  -u, --url    GitHub Enterprise URL (default: <none>)
 ```
 
 ```console
@@ -128,15 +132,16 @@ Update all merge settings to allow specific types only.
 
 Flags:
 
-  -commits  Allow merge commits, add all commits from the head branch to the base branch with a merge commit (default: false)
-  -d        enable debug logging (default: false)
-  -dry-run  do not change settings just print the changes that would occur (default: false)
-  -nouser   do not include your user (default: false)
-  -orgs     organizations to include (default: [])
-  -rebase   Allow rebase merging, add all commits from the head branch onto the base branch individually (default: false)
-  -squash   Allow squash merging, combine all commits from the head branch into a single commit in the base branch (default: false)
-  -token    GitHub API token (or env var GITHUB_TOKEN)
-  -url      GitHub Enterprise URL (default: <none>)
+  --commits    Allow merge commits, add all commits from the head branch to the base branch with a merge commit (default: false)
+  -d, --debug  enable debug logging (default: false)
+  --dry-run    do not change settings just print the changes that would occur (default: false)
+  --nouser     do not include your user (default: false)
+  --orgs       organizations to include (default: [])
+  -r, --repo   specific repo (e.g. 'genuinetools/img') (default: <none>)
+  --rebase     Allow rebase merging, add all commits from the head branch onto the base branch individually (default: false)
+  --squash     Allow squash merging, combine all commits from the head branch into a single commit in the base branch (default: false)
+  -t, --token  GitHub API token (or env var GITHUB_TOKEN) (default: <none>)
+  -u, --url    GitHub Enterprise URL (default: <none>)
 ```
 
 ```console
@@ -148,4 +153,12 @@ UPDATE] jessfraz/.vim will be changed to squash
 [UPDATE] jessfraz/apparmor-docs will be changed to squash
 [UPDATE] jessfraz/baselayout will be changed to squash
 ...
+```
+
+### Update Release
+
+Update the release body according to the template.
+
+```console
+$ pepper release --repo genuinetools/img
 ```

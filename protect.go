@@ -27,10 +27,6 @@ func (cmd *protectCommand) Run(ctx context.Context, args []string) error {
 
 // handleRepo will return nil error if the user does not have access to something.
 func handleRepoProtectBranch(ctx context.Context, client *github.Client, repo *github.Repository) error {
-	if !in(orgs, *repo.Owner.Login) {
-		return nil
-	}
-
 	opt := &github.ListOptions{
 		PerPage: 100,
 	}

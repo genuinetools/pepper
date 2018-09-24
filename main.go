@@ -8,6 +8,7 @@ import (
 	"net/url"
 	"os"
 	"os/signal"
+	"strings"
 	"syscall"
 	"time"
 
@@ -20,11 +21,12 @@ import (
 )
 
 var (
-	token  string
-	enturl string
-	orgs   stringSlice
-	nouser bool
-	dryrun bool
+	token      string
+	enturl     string
+	orgs       stringSlice
+	singleRepo string
+	nouser     bool
+	dryrun     bool
 
 	debug bool
 )
@@ -45,7 +47,7 @@ func main() {
 	// Create a new cli program.
 	p := cli.NewProgram()
 	p.Name = "pepper"
-	p.Description = "A tool to set all GitHub settings for multiple repos at once"
+	p.Description = "A tool for performing actions on GitHub repos or a single repo"
 
 	// Set the GitCommit and Version.
 	p.GitCommit = version.GITCOMMIT
@@ -56,17 +58,26 @@ func main() {
 		&collaboratorsCommand{},
 		&mergeCommand{},
 		&protectCommand{},
+		&releaseCommand{},
 	}
 
 	// Setup the global flags.
 	p.FlagSet = flag.NewFlagSet("pepper", flag.ExitOnError)
 	p.FlagSet.StringVar(&token, "token", os.Getenv("GITHUB_TOKEN"), "GitHub API token (or env var GITHUB_TOKEN)")
+	p.FlagSet.StringVar(&token, "t", os.Getenv("GITHUB_TOKEN"), "GitHub API token (or env var GITHUB_TOKEN)")
+
 	p.FlagSet.StringVar(&enturl, "url", "", "GitHub Enterprise URL")
+	p.FlagSet.StringVar(&enturl, "u", "", "GitHub Enterprise URL")
+
 	p.FlagSet.Var(&orgs, "orgs", "organizations to include")
+	p.FlagSet.StringVar(&singleRepo, "repo", "", "specific repo (e.g. 'genuinetools/img')")
+	p.FlagSet.StringVar(&singleRepo, "r", "", "specific repo (e.g. 'genuinetools/img')")
+
 	p.FlagSet.BoolVar(&nouser, "nouser", false, "do not include your user")
 	p.FlagSet.BoolVar(&dryrun, "dry-run", false, "do not change settings just print the changes that would occur")
 
 	p.FlagSet.BoolVar(&debug, "d", false, "enable debug logging")
+	p.FlagSet.BoolVar(&debug, "debug", false, "enable debug logging")
 
 	// Set the before function.
 	p.Before = func(ctx context.Context) error {
@@ -164,12 +175,29 @@ func getRepositories(ctx context.Context, client *github.Client, page, perPage i
 			PerPage: perPage,
 		},
 	}
-	repos, resp, err := client.Repositories.List(ctx, "", opt)
+
+	var (
+		repos []*github.Repository
+		resp  *github.Response
+		err   error
+	)
+
+	if len(singleRepo) < 1 {
+		// Get all the repos.
+		repos, resp, err = client.Repositories.List(ctx, "", opt)
+	} else {
+		// Find the one repo.
+		repos, err = searchRepos(ctx, client, singleRepo)
+	}
 	if err != nil {
 		return err
 	}
 
 	for _, repo := range repos {
+		if !in(orgs, *repo.Owner.Login) {
+			continue
+		}
+
 		logrus.Debugf("Handling repo %s...", *repo.FullName)
 		if err := cmd(ctx, client, repo); err != nil {
 			logrus.Warn(err)
@@ -177,7 +205,7 @@ func getRepositories(ctx context.Context, client *github.Client, page, perPage i
 	}
 
 	// Return early if we are on the last page.
-	if page == resp.LastPage || resp.NextPage == 0 {
+	if resp == nil || page == resp.LastPage || resp.NextPage == 0 {
 		return nil
 	}
 
@@ -192,4 +220,31 @@ func in(a stringSlice, s string) bool {
 		}
 	}
 	return false
+}
+
+func searchRepos(ctx context.Context, client *github.Client, searchRepo string) ([]*github.Repository, error) {
+	optSearch := &github.SearchOptions{
+		Sort:  "forks",
+		Order: "desc",
+		ListOptions: github.ListOptions{
+			Page:    1,
+			PerPage: 1,
+		},
+	}
+
+	search := strings.SplitN(searchRepo, "/", 2)
+	repos, _, err := client.Search.Repositories(ctx, fmt.Sprintf("org:%s in:name %s fork:true", search[0], search[1]), optSearch)
+	if err != nil {
+		return nil, err
+	}
+
+	if len(repos.Repositories) < 1 {
+		return nil, fmt.Errorf("found no repositories matching: %s", searchRepo)
+	}
+
+	r := []*github.Repository{}
+	for _, repo := range repos.Repositories {
+		r = append(r, &repo)
+	}
+	return r, nil
 }
