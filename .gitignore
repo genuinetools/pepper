@@ -49,4 +49,4 @@ cross/
 coverage.txt
 profile.out
 
-!go.mods
+!go.mod
