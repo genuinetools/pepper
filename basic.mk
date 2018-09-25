@@ -38,7 +38,7 @@ $(NAME): $(wildcard *.go) $(wildcard */*.go) VERSION.txt
 .PHONY: static
 static: ## Builds a static executable.
 	@echo "+ $@"
-	CGO_ENABLED=0 $(GO) build \
+	CGO_ENABLED=$(CGO_ENABLED) $(GO) build \
 				-tags "$(BUILDTAGS) static_build" \
 				${GO_LDFLAGS_STATIC} -o $(NAME) .
 
@@ -87,7 +87,7 @@ install: ## Installs the executable or package.
 
 define buildpretty
 mkdir -p $(BUILDDIR)/$(1)/$(2);
-GOOS=$(1) GOARCH=$(2) CGO_ENABLED=0 $(GO) build \
+GOOS=$(1) GOARCH=$(2) CGO_ENABLED=$(CGO_ENABLED) $(GO) build \
 	 -o $(BUILDDIR)/$(1)/$(2)/$(NAME) \
 	 -a -tags "$(BUILDTAGS) static_build netgo" \
 	 -installsuffix netgo ${GO_LDFLAGS_STATIC} .;
@@ -101,7 +101,7 @@ cross: *.go VERSION.txt ## Builds the cross-compiled binaries, creating a clean 
 	$(foreach GOOSARCH,$(GOOSARCHES), $(call buildpretty,$(subst /,,$(dir $(GOOSARCH))),$(notdir $(GOOSARCH))))
 
 define buildrelease
-GOOS=$(1) GOARCH=$(2) CGO_ENABLED=0 $(GO) build \
+GOOS=$(1) GOARCH=$(2) CGO_ENABLED=$(CGO_ENABLED) $(GO) build \
 	 -o $(BUILDDIR)/$(NAME)-$(1)-$(2) \
 	 -a -tags "$(BUILDTAGS) static_build netgo" \
 	 -installsuffix netgo ${GO_LDFLAGS_STATIC} .;
