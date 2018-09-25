@@ -158,12 +158,12 @@ AUTHORS:
 
 .PHONY: vendor
 vendor: ## Updates the vendoring directory.
-	@$(RM) Gopkg.toml Gopkg.lock
-	@$(RM) go.mod go.sum
+	@$(RM) go.sum
 	@$(RM) -r vendor
-	@GO111MODULE=on $(GO) mod init
-	@GO111MODULE=on $(GO) mod tidy
-	@GO111MODULE=on $(GO) mod vendor
+	GO111MODULE=on $(GO) mod init || true
+	GO111MODULE=on $(GO) mod tidy
+	GO111MODULE=on $(GO) mod vendor
+	@$(RM) Gopkg.toml Gopkg.lock
 
 .PHONY: clean
 clean: ## Cleanup any build binaries or packages.
