@@ -25,6 +25,7 @@ all your GitHub repositories.
       * [Via Go](README.md#via-go)
  * [Usage](README.md#usage)
    * [Protect](README.md#protect)
+   * [Audit](README.md#audit)
    * [Collaborators](README.md#collaborators)
    * [Merge](README.md#merge)
    * [Update Release](README.md#update-release)
@@ -61,6 +62,7 @@ Flags:
 
 Commands:
 
+  audit          Audit collaborators, branches, hooks, deploy keys etc.
   collaborators  Add a collaborator to all the repositories.
   merge          Update all merge settings to allow specific types only.
   protect        Protect the master branch.
@@ -84,6 +86,35 @@ $ pepper protect --dry-run --token 12345 --orgs jessconf --orgs maintainerati
 [OK] genuinetools/ykpiv:master is already protected
 [OK] maintainerati/wontfix-cabal-site:master is already protected
 ```
+
+### Audit
+
+Audit collaborators, branches, hooks, deploy keys etc.
+
+```console
+$ pepper audit -r genuinetools/img
+genuinetools/img -> 
+        Collaborators (7):
+                Admin (2):
+                        jessfraz
+                        j3ssb0t
+                Write (5):
+                        bketelsen
+                        gabrtv
+                        bacongobbler
+                        sajayantony
+                        AkihiroSuda
+                Read (0):
+
+        Hooks (4):
+                travis - active:true (https://api.github.com/repos/genuinetools/img/hooks/22351842)
+                jenkins - active:true (https://api.github.com/repos/genuinetools/img/hooks/22351967)
+                web - active:true (https://api.github.com/repos/genuinetools/img/hooks/38652766)
+                web - active:true (https://api.github.com/repos/genuinetools/img/hooks/38654028)
+        Protected Branches (1): master
+        Merge Methods: squash
+```
+
 
 ### Collaborators
 
