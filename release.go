@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"context"
+	"errors"
 	"flag"
 	"fmt"
 	"html/template"
@@ -127,7 +128,7 @@ func (cmd *releaseCommand) handleRelease(ctx context.Context, client *github.Cli
 					osn := suffix[0]
 					arch := suffix[1]
 
-					c, err := getURLContent(asset.GetBrowserDownloadURL())
+					c, err := getReleaseAssetContent(ctx, client, repo, asset.GetID())
 					if err != nil {
 						return err
 					}
@@ -206,14 +207,24 @@ func updateRelease(ctx context.Context, client *github.Client, repo *github.Repo
 	return err
 }
 
-func getURLContent(uri string) (string, error) {
-	resp, err := http.Get(uri)
+func getReleaseAssetContent(ctx context.Context, client *github.Client, repo *github.Repository, id int64) (string, error) {
+	body, redirectURL, err := client.Repositories.DownloadReleaseAsset(ctx, repo.GetOwner().GetLogin(), repo.GetName(), id)
 	if err != nil {
 		return "", err
 	}
-	defer resp.Body.Close()
+	if body == nil && len(redirectURL) > 0 {
+		resp, err := http.Get(redirectURL)
+		if err != nil {
+			return "", fmt.Errorf("getting redirect url %s failed: %v", redirectURL, err)
+		}
+		body = resp.Body
+	}
+	if body == nil {
+		return "", errors.New("body for asset was nil")
+	}
+	defer body.Close()
 
-	b, err := ioutil.ReadAll(resp.Body)
+	b, err := ioutil.ReadAll(body)
 	if err != nil {
 		return "", err
 	}
