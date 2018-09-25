@@ -31,7 +31,3 @@
 [[constraint]]
   name = "github.com/google/go-github"
   branch = "master"
-
-[[constraint]]
-  name = "github.com/docker/go-units"
-  branch = "master"

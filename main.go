@@ -55,6 +55,7 @@ func main() {
 
 	// Build the list of available commands.
 	p.Commands = []cli.Command{
+		&auditCommand{},
 		&collaboratorsCommand{},
 		&mergeCommand{},
 		&protectCommand{},
