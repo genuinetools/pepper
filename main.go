@@ -90,8 +90,8 @@ func main() {
 			return errors.New("GitHub token cannot be empty")
 		}
 
-		if nouser && orgs == nil {
-			return errors.New("no organizations provided")
+		if nouser && orgs == nil && len(singleRepo) < 1 {
+			return errors.New("no organizations, user, or repo provided")
 		}
 
 		return nil
