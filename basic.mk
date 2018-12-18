@@ -1,3 +1,6 @@
+# Set the shell
+SHELL := /bin/bash
+
 # Set an output prefix, which is the local directory if not specified
 PREFIX?=$(shell pwd)
 
