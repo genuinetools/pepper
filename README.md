@@ -20,15 +20,11 @@ Also see [genuinetools/audit](https://github.com/genuinetools/audit) for checkin
 collaborators, hooks, deploy keys, and protected branched you have added on
 all your GitHub repositories.
 
- * [Installation](README.md#installation)
-      * [Binaries](README.md#binaries)
-      * [Via Go](README.md#via-go)
- * [Usage](README.md#usage)
-   * [Protect](README.md#protect)
-   * [Audit](README.md#audit)
-   * [Collaborators](README.md#collaborators)
-   * [Merge](README.md#merge)
-   * [Update Release](README.md#update-release)
+**Table of Contents**
+
+<!-- toc -->
+
+<!-- tocstop -->
 
 ## Installation
 
