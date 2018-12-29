@@ -24,6 +24,16 @@ all your GitHub repositories.
 
 <!-- toc -->
 
+- [Installation](#installation)
+    + [Binaries](#binaries)
+    + [Via Go](#via-go)
+- [Usage](#usage)
+  * [Protect](#protect)
+  * [Audit](#audit)
+  * [Collaborators](#collaborators)
+  * [Merge](#merge)
+  * [Update Release](#update-release)
+
 <!-- tocstop -->
 
 ## Installation
