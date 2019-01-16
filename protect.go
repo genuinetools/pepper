@@ -19,10 +19,12 @@ func (cmd *protectCommand) Hidden() bool      { return false }
 
 func (cmd *protectCommand) Register(fs *flag.FlagSet) {
 	fs.BoolVar(&cmd.review, "review", false, "Require pull request reviews before merging")
+	fs.BoolVar(&cmd.reviewDismissStale, "review-dismiss-stale", false, "Dismiss stale pull request approvals when new commits are pushed (only applicable if pull request reviews are required)")
 }
 
 type protectCommand struct {
-	review bool
+	review             bool
+	reviewDismissStale bool
 }
 
 func (cmd *protectCommand) Run(ctx context.Context, args []string) error {
@@ -63,14 +65,16 @@ func (cmd *protectCommand) handleRepoProtectBranch(ctx context.Context, client *
 						return err
 					}
 					if protection.RequiredPullRequestReviews != nil && protection.RequiredPullRequestReviews.RequiredApprovingReviewCount > 0 {
-						fmt.Printf("[OK] %s:%s is already protected and pull request reviews are required\n", *repo.FullName, b.GetName())
-						return nil
+						if protection.RequiredPullRequestReviews.DismissStaleReviews == cmd.reviewDismissStale {
+							fmt.Printf("[OK] %s:%s is already protected and pull request reviews are required\n", *repo.FullName, b.GetName())
+							return nil
+						}
 					}
 				}
 			}
 
 			if dryrun {
-				fmt.Printf("[UPDATE] %s:%s will be changed to protected (require reviews: %v)\n", *repo.FullName, b.GetName(), cmd.review)
+				fmt.Printf("[UPDATE] %s:%s will be changed to protected (require reviews: %v, dismiss stale reviews: %v)\n", *repo.FullName, b.GetName(), cmd.review, cmd.reviewDismissStale)
 				return nil
 			}
 
@@ -79,6 +83,7 @@ func (cmd *protectCommand) handleRepoProtectBranch(ctx context.Context, client *
 			if cmd.review {
 				reviews = &github.PullRequestReviewsEnforcementRequest{
 					RequiredApprovingReviewCount: 1,
+					DismissStaleReviews:          cmd.reviewDismissStale,
 				}
 			}
 
