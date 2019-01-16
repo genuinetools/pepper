@@ -9,7 +9,7 @@ import (
 	"github.com/google/go-github/github"
 )
 
-const protectHelp = `Protect the master branch.`
+const protectHelp = `Protect the default branch.`
 
 func (cmd *protectCommand) Name() string      { return "protect" }
 func (cmd *protectCommand) Args() string      { return "[OPTIONS]" }
@@ -40,7 +40,7 @@ func handleRepoProtectBranch(ctx context.Context, client *github.Client, repo *g
 	}
 
 	for _, branch := range branches {
-		if branch.GetName() == "master" {
+		if branch.GetName() == repo.GetDefaultBranch() {
 			// we must get the individual branch for the branch protection to work
 			b, _, err := client.Repositories.GetBranch(ctx, *repo.Owner.Login, *repo.Name, branch.GetName())
 			if err != nil {
