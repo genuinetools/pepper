@@ -17,16 +17,20 @@ func (cmd *protectCommand) ShortHelp() string { return protectHelp }
 func (cmd *protectCommand) LongHelp() string  { return protectHelp }
 func (cmd *protectCommand) Hidden() bool      { return false }
 
-func (cmd *protectCommand) Register(fs *flag.FlagSet) {}
+func (cmd *protectCommand) Register(fs *flag.FlagSet) {
+	fs.BoolVar(&cmd.review, "review", false, "Require pull request reviews before merging")
+}
 
-type protectCommand struct{}
+type protectCommand struct {
+	review bool
+}
 
 func (cmd *protectCommand) Run(ctx context.Context, args []string) error {
-	return runCommand(ctx, handleRepoProtectBranch)
+	return runCommand(ctx, cmd.handleRepoProtectBranch)
 }
 
 // handleRepo will return nil error if the user does not have access to something.
-func handleRepoProtectBranch(ctx context.Context, client *github.Client, repo *github.Repository) error {
+func (cmd *protectCommand) handleRepoProtectBranch(ctx context.Context, client *github.Client, repo *github.Repository) error {
 	opt := &github.ListOptions{
 		PerPage: 100,
 	}
@@ -49,13 +53,33 @@ func handleRepoProtectBranch(ctx context.Context, client *github.Client, repo *g
 
 			// return early if it is already protected
 			if b.GetProtected() {
-				fmt.Printf("[OK] %s:%s is already protected\n", *repo.FullName, b.GetName())
-				return nil
+				if !cmd.review {
+					fmt.Printf("[OK] %s:%s is already protected\n", *repo.FullName, b.GetName())
+					return nil
+				} else {
+					// we need to check if pull request reviews are required
+					protection, _, err := client.Repositories.GetBranchProtection(ctx, *repo.Owner.Login, *repo.Name, b.GetName())
+					if err != nil {
+						return err
+					}
+					if protection.RequiredPullRequestReviews != nil && protection.RequiredPullRequestReviews.RequiredApprovingReviewCount > 0 {
+						fmt.Printf("[OK] %s:%s is already protected and pull request reviews are required\n", *repo.FullName, b.GetName())
+						return nil
+					}
+				}
 			}
 
 			if dryrun {
-				fmt.Printf("[UPDATE] %s:%s will be changed to protected\n", *repo.FullName, b.GetName())
+				fmt.Printf("[UPDATE] %s:%s will be changed to protected (require reviews: %v)\n", *repo.FullName, b.GetName(), cmd.review)
 				return nil
+			}
+
+			// settings for pull request reviews
+			var reviews *github.PullRequestReviewsEnforcementRequest
+			if cmd.review {
+				reviews = &github.PullRequestReviewsEnforcementRequest{
+					RequiredApprovingReviewCount: 1,
+				}
 			}
 
 			// set the branch to be protected
@@ -64,6 +88,7 @@ func handleRepoProtectBranch(ctx context.Context, client *github.Client, repo *g
 					Strict:   false,
 					Contexts: []string{},
 				},
+				RequiredPullRequestReviews: reviews,
 			}); err != nil {
 				return err
 			}
