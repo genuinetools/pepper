@@ -27,6 +27,7 @@ var (
 	singleRepo string
 	nouser     bool
 	dryrun     bool
+	jsonout    bool
 
 	debug bool
 )
@@ -76,6 +77,8 @@ func main() {
 
 	p.FlagSet.BoolVar(&nouser, "nouser", false, "do not include your user")
 	p.FlagSet.BoolVar(&dryrun, "dry-run", false, "do not change settings just print the changes that would occur")
+
+	p.FlagSet.BoolVar(&jsonout, "json", false, "output as json")
 
 	p.FlagSet.BoolVar(&debug, "d", false, "enable debug logging")
 	p.FlagSet.BoolVar(&debug, "debug", false, "enable debug logging")
