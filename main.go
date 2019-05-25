@@ -104,7 +104,7 @@ func main() {
 
 func runCommand(ctx context.Context, cmd func(context.Context, *github.Client, *github.Repository) error) error {
 	// On ^C, or SIGTERM handle exit.
-	signals := make(chan os.Signal, 0)
+	signals := make(chan os.Signal)
 	signal.Notify(signals, os.Interrupt)
 	signal.Notify(signals, syscall.SIGTERM)
 	var cancel context.CancelFunc
@@ -129,7 +129,7 @@ func runCommand(ctx context.Context, cmd func(context.Context, *github.Client, *
 		var err error
 		client.BaseURL, err = url.Parse(enturl + "/api/v3/")
 		if err != nil {
-			return fmt.Errorf("Parsing URL for enterprise failed: %v", err)
+			return fmt.Errorf("parsing URL for enterprise failed: %v", err)
 		}
 	}
 
@@ -147,7 +147,7 @@ func runCommand(ctx context.Context, cmd func(context.Context, *github.Client, *
 				return fmt.Errorf("%s Limit: %d; Remaining: %d; Retry After: %s", v.Message, v.Rate.Limit, v.Rate.Remaining, time.Until(v.Rate.Reset.Time).String())
 			}
 
-			return fmt.Errorf("Getting user failed: %v", err)
+			return fmt.Errorf("getting user failed: %v", err)
 		}
 		username := *user.Login
 		// add the current user to orgs
