@@ -1,6 +1,7 @@
 <p align="left"><img src="logo/horizontal.png" alt="pepper" height="160px"></p>
 
-[![Travis CI](https://img.shields.io/travis/genuinetools/pepper.svg?style=for-the-badge)](https://travis-ci.org/genuinetools/pepper)
+![make-all](https://github.com/genuinetools/pepper/workflows/make-all/badge.svg)
+![make-image](https://github.com/genuinetools/pepper/workflows/make-image/badge.svg)
 [![GoDoc](https://img.shields.io/badge/godoc-reference-5272B4.svg?style=for-the-badge)](https://godoc.org/github.com/genuinetools/pepper)
 [![Github All Releases](https://img.shields.io/github/downloads/genuinetools/pepper/total.svg?style=for-the-badge)](https://github.com/genuinetools/pepper/releases)
 
@@ -22,19 +23,8 @@ all your GitHub repositories.
 
 **Table of Contents**
 
-<!-- toc -->
-
-- [Installation](#installation)
-    + [Binaries](#binaries)
-    + [Via Go](#via-go)
-- [Usage](#usage)
-  * [Protect](#protect)
-  * [Audit](#audit)
-  * [Collaborators](#collaborators)
-  * [Merge](#merge)
-  * [Update Release](#update-release)
-
-<!-- tocstop -->
+<!-- START doctoc -->
+<!-- END doctoc -->
 
 ## Installation
 
