@@ -20,10 +20,10 @@ golang.org/x/oauth2/internal
 golang.org/x/sys/unix
 golang.org/x/sys/windows
 # google.golang.org/appengine v1.2.0
-google.golang.org/appengine/urlfetch
 google.golang.org/appengine/internal
-google.golang.org/appengine/internal/urlfetch
 google.golang.org/appengine/internal/base
 google.golang.org/appengine/internal/datastore
 google.golang.org/appengine/internal/log
 google.golang.org/appengine/internal/remote_api
+google.golang.org/appengine/internal/urlfetch
+google.golang.org/appengine/urlfetch
