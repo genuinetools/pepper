@@ -1,3 +1,14 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**
+
+- [OAuth2 for Go](#oauth2-for-go)
+  - [Installation](#installation)
+  - [App Engine](#app-engine)
+  - [Report Issues / Send Patches](#report-issues--send-patches)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # OAuth2 for Go
 
 [![Build Status](https://travis-ci.org/golang/oauth2.svg?branch=master)](https://travis-ci.org/golang/oauth2)

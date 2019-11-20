@@ -1,3 +1,13 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**
+
+- [Contributing to Go](#contributing-to-go)
+  - [Filing issues](#filing-issues)
+  - [Contributing code](#contributing-code)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # Contributing to Go
 
 Go is an open source project.
