@@ -17,10 +17,6 @@ You can set which orgs to include and use `--dry-run` to see the
 changes before they are actually made. Your user is automatically added to the
 repositories it will consider.
 
-Also see [genuinetools/audit](https://github.com/genuinetools/audit) for checking what
-collaborators, hooks, deploy keys, and protected branched you have added on
-all your GitHub repositories.
-
 **Table of Contents**
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
