@@ -48,7 +48,7 @@ For installation instructions from binaries please visit the [Releases Page](htt
 #### Via Go
 
 ```console
-$ go get github.com/genuinetools/pepper
+$ go install github.com/genuinetools/pepper@latest
 ```
 
 ## Usage
